@@ -1,0 +1,174 @@
+<!doctype html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GlbBus — 核心 ER 图</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f8fafc;
+    --fg: #172033;
+    --muted: #5b6475;
+    --line: #64748b;
+    --entity: #c7d2fe;
+    --rel: #bfdbfe;
+    --attr: #e2e8f0;
+    --pk: #fde68a;
+    --fk: #99f6e4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f172a;
+      --fg: #e5e7eb;
+      --muted: #a3adbd;
+      --line: #94a3b8;
+      --entity: #4338ca;
+      --rel: #1d4ed8;
+      --attr: #334155;
+      --pk: #92400e;
+      --fk: #0f766e;
+    }
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 13px/1.4 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  main { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+  svg { width: 100%; height: auto; display: block; }
+  .title { font-size: 20px; font-weight: 650; fill: var(--fg); }
+  .subtitle { font-size: 13px; fill: var(--muted); }
+  .entity-name { font-size: 14px; font-weight: 700; fill: var(--fg); }
+  .field { font-size: 12px; fill: var(--fg); }
+  .pk-tag { font-size: 10px; fill: var(--pk); font-weight: 700; }
+  .fk-tag { font-size: 10px; fill: var(--fk); font-weight: 700; }
+  .edge { stroke: var(--line); stroke-width: 1.5; fill: none; }
+  .node-box { stroke: var(--line); stroke-width: 1; rx: 6; ry: 6; fill: var(--entity); }
+  .head-box { stroke: var(--line); stroke-width: 1; rx: 6; ry: 6; fill: var(--entity); }
+</style>
+<main>
+  <svg viewBox="0 0 1050 820" xmlns="http://www.w3.org/2000/svg">
+    <text class="title" x="16" y="28">GlbBus — 核心 ER 图</text>
+    <text class="subtitle" x="16" y="46">MVP 数据库模型 · Supabase PostgreSQL</text>
+
+    <!-- ====== 表: products ====== -->
+    <rect class="head-box" x="30" y="70" width="240" height="28" />
+    <text class="entity-name" x="150" y="90" text-anchor="middle">products</text>
+
+    <rect class="node-box" x="30" y="98" width="240" height="168" />
+    <text class="field" x="42" y="116">🔑 id (uuid, PK)</text>
+    <text class="field" x="42" y="134">📎 supplier_id (uuid, FK)</text>
+    <text class="field" x="42" y="152">📛 name_en / name_zh</text>
+    <text class="field" x="42" y="170">🔢 sku (varchar, unique)</text>
+    <text class="field" x="42" y="188">📄 description (jsonb, 多语言)</text>
+    <text class="field" x="42" y="206">📐 specifications (jsonb)</text>
+    <text class="field" x="42" y="224">💰 base_price (decimal)</text>
+    <text class="field" x="42" y="242">🏷️ category (varchar)</text>
+    <text class="field" x="42" y="260">🖼️ images (text[], Storage refs)</text>
+
+    <!-- ====== 表: suppliers ====== -->
+    <rect class="head-box" x="380" y="70" width="240" height="28" />
+    <text class="entity-name" x="500" y="90" text-anchor="middle">suppliers</text>
+
+    <rect class="node-box" x="380" y="98" width="240" height="140" />
+    <text class="field" x="392" y="116">🔑 id (uuid, PK)</text>
+    <text class="field" x="392" y="134">📛 name (varchar)</text>
+    <text class="field" x="392" y="152">📍 country (varchar)</text>
+    <text class="field" x="392" y="170">📞 contact_email</text>
+    <text class="field" x="392" y="188">📋 certifications (text[])</text>
+    <text class="field" x="392" y="206">📝 production_capacity</text>
+    <text class="field" x="392" y="224">🌐 api_webhook_url</text>
+
+    <!-- ====== 表: inquiries ====== -->
+    <rect class="head-box" x="30" y="340" width="240" height="28" />
+    <text class="entity-name" x="150" y="360" text-anchor="middle">inquiries</text>
+
+    <rect class="node-box" x="30" y="368" width="240" height="196" />
+    <text class="field" x="42" y="386">🔑 id (uuid, PK)</text>
+    <text class="field" x="42" y="404">📎 product_id (uuid, FK)</text>
+    <text class="field" x="42" y="422">👤 buyer_name (varchar)</text>
+    <text class="field" x="42" y="440">📧 buyer_email (varchar)</text>
+    <text class="field" x="42" y="458">🌍 buyer_country (varchar)</text>
+    <text class="field" x="42" y="476">📞 buyer_phone (varchar)</text>
+    <text class="field" x="42" y="494">📝 message (text)</text>
+    <text class="field" x="42" y="512">📎 quantity (int)</text>
+    <text class="field" x="42" y="530">⭐ ai_quality_score (int)</text>
+    <text class="field" x="42" y="548">📊 status (enum: new/open/closed)</text>
+
+    <!-- ====== 表: quotations ====== -->
+    <rect class="head-box" x="380" y="340" width="240" height="28" />
+    <text class="entity-name" x="500" y="360" text-anchor="middle">quotations</text>
+
+    <rect class="node-box" x="380" y="368" width="240" height="168" />
+    <text class="field" x="392" y="386">🔑 id (uuid, PK)</text>
+    <text class="field" x="392" y="404">📎 inquiry_id (uuid, FK)</text>
+    <text class="field" x="392" y="422">📎 supplier_id (uuid, FK)</text>
+    <text class="field" x="392" y="440">💰 unit_price (decimal)</text>
+    <text class="field" x="392" y="458">📦 moq (int)</text>
+    <text class="field" x="392" y="476">⏱️ lead_time_days (int)</text>
+    <text class="field" x="392" y="494">🚢 shipping_terms (varchar)</text>
+    <text class="field" x="392" y="530">📊 status (enum: draft/sent/accepted/rejected)</text>
+
+    <!-- ====== 表: orders ====== -->
+    <rect class="head-box" x="380" y="590" width="240" height="28" />
+    <text class="entity-name" x="500" y="610" text-anchor="middle">orders</text>
+
+    <rect class="node-box" x="380" y="618" width="240" height="154" />
+    <text class="field" x="392" y="636">🔑 id (uuid, PK)</text>
+    <text class="field" x="392" y="654">📎 quotation_id (uuid, FK)</text>
+    <text class="field" x="392" y="672">📦 quantity (int)</text>
+    <text class="field" x="392" y="690">💰 total_amount (decimal)</text>
+    <text class="field" x="392" y="708">📊 status (enum)</text>
+    <text class="field" x="392" y="726">⏱️ production_progress</text>
+    <text class="field" x="392" y="744">📎 shipping_tracking (varchar)</text>
+
+    <!-- ====== 表: content (Sanity 镜像) ====== -->
+    <rect class="head-box" x="30" y="590" width="240" height="28" />
+    <text class="entity-name" x="150" y="610" text-anchor="middle">content_entries</text>
+
+    <rect class="node-box" x="30" y="618" width="240" height="126" />
+    <text class="field" x="42" y="636">🔑 id (uuid, PK)</text>
+    <text class="field" x="42" y="654">📎 product_id (uuid, FK, nullable)</text>
+    <text class="field" x="42" y="672">📛 slug (varchar, unique)</text>
+    <text class="field" x="42" y="690">📄 body (jsonb, 多语言)</text>
+    <text class="field" x="42" y="710">🏷️ type (enum: blog/page)</text>
+    <text class="field" x="42" y="730">🔖 tags (text[])</text>
+
+    <!-- ====== 关系线 ====== -->
+    <defs>
+      <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+        <path d="M0,0 L10,3.5 L0,7 Z" fill="var(--line)" />
+      </marker>
+      <marker id="crow-left" markerWidth="10" markerHeight="8" refX="0" refY="4" orient="auto">
+        <path d="M10,0 L0,4 L10,8" stroke="var(--line)" stroke-width="1.5" fill="none" />
+      </marker>
+    </defs>
+
+    <!-- products → suppliers (N:1) -->
+    <path class="edge" marker-start="url(#crow-left)" marker-end="url(#arrow)" d="M270,160 L370,160" />
+
+    <!-- products → inquiries (1:N) -->
+    <path class="edge" marker-start="url(#crow-left)" marker-end="url(#arrow)" d="M150,266 L150,332 L150,360" />
+
+    <!-- inquiries → quotations (1:N) -->
+    <path class="edge" marker-start="url(#crow-left)" marker-end="url(#arrow)" d="M270,450 L370,450" />
+
+    <!-- suppliers → quotations (1:N) -->
+    <path class="edge" marker-start="url(#crow-left)" marker-end="url(#arrow)" d="M500,238 L500,300 L500,332 L500,360" />
+
+    <!-- quotations → orders (1:N) -->
+    <path class="edge" marker-start="url(#crow-left)" marker-end="url(#arrow)" d="M500,538 L500,580 L500,610" />
+
+    <!-- products → content_entries (1:N) -->
+    <path class="edge" marker-start="url(#crow-left)" marker-end="url(#arrow)" d="M150,266 L150,300 L150,580 L150,610" />
+
+    <!-- 图例 -->
+    <text class="subtitle" x="700" y="650">图例</text>
+    <rect x="700" y="660" width="18" height="12" fill="var(--pk)" rx="2" />
+    <text class="field" x="724" y="672">🔑 主键 (PK)</text>
+    <rect x="700" y="688" width="18" height="12" fill="var(--fk)" rx="2" />
+    <text class="field" x="724" y="700">📎 外键 (FK)</text>
+    <text class="field" x="700" y="724">1 ──→ N  一对多关系</text>
+  </svg>
+</main>
+</html>

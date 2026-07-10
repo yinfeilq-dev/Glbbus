@@ -1,0 +1,239 @@
+<!doctype html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GlbBus — 系统架构图</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f8fafc;
+    --fg: #172033;
+    --muted: #5b6475;
+    --line: #64748b;
+    --neutral: #e2e8f0;
+    --input: #bfdbfe;
+    --process: #c7d2fe;
+    --storage: #99f6e4;
+    --external: #fde68a;
+    --risk: #fecaca;
+    --ai: #e9d5ff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f172a;
+      --fg: #e5e7eb;
+      --muted: #a3adbd;
+      --line: #94a3b8;
+      --neutral: #334155;
+      --input: #1d4ed8;
+      --process: #4338ca;
+      --storage: #0f766e;
+      --external: #92400e;
+      --risk: #991b1b;
+      --ai: #5b21b6;
+    }
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 14px/1.4 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  main { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+  svg { width: 100%; height: auto; display: block; }
+  .title { font-size: 20px; font-weight: 650; fill: var(--fg); }
+  .subtitle { font-size: 13px; fill: var(--muted); }
+  .label { font-size: 13px; font-weight: 600; fill: var(--fg); }
+  .small { font-size: 11px; fill: var(--muted); }
+  .node { stroke: var(--line); stroke-width: 1; rx: 6; ry: 6; }
+  .neutral { fill: var(--neutral); }
+  .input { fill: var(--input); }
+  .process { fill: var(--process); }
+  .storage { fill: var(--storage); }
+  .external { fill: var(--external); }
+  .risk { fill: var(--risk); }
+  .ai { fill: var(--ai); }
+  .edge { stroke: var(--line); stroke-width: 1.5; fill: none; }
+  .zone { fill: none; stroke: var(--line); stroke-width: 1; stroke-dasharray: 6 5; opacity: .7; }
+  .zone-label { font-size: 12px; font-weight: 600; fill: var(--muted); }
+</style>
+<main>
+  <svg viewBox="0 0 1050 820" xmlns="http://www.w3.org/2000/svg">
+    <!-- Title -->
+    <text class="title" x="16" y="28">GlbBus — 系统架构</text>
+    <text class="subtitle" x="16" y="46">B2B 工业品跨境电商 AI 平台 · Next.js + Supabase + AI SDK</text>
+
+    <!-- ====== 边界区域 ====== -->
+
+    <!-- 浏览器 / CDN 区 -->
+    <rect class="zone" x="10" y="60" width="1030" height="130" rx="8" ry="8" />
+    <text class="zone-label" x="20" y="80">🌐 客户端 &amp; CDN</text>
+
+    <!-- 应用层 -->
+    <rect class="zone" x="10" y="200" width="1030" height="200" rx="8" ry="8" />
+    <text class="zone-label" x="20" y="220">⚙️ 应用层 (Vercel Edge Network)</text>
+
+    <!-- 数据层 -->
+    <rect class="zone" x="10" y="410" width="480" height="190" rx="8" ry="8" />
+    <text class="zone-label" x="20" y="430">💾 数据层</text>
+
+    <!-- AI 层 -->
+    <rect class="zone" x="500" y="410" width="540" height="190" rx="8" ry="8" />
+    <text class="zone-label" x="510" y="430">🤖 AI 层</text>
+
+    <!-- 外部区 -->
+    <rect class="zone" x="10" y="610" width="1030" height="180" rx="8" ry="8" />
+    <text class="zone-label" x="20" y="630">🔗 外部系统 &amp; 供应商</text>
+
+    <!-- ====== 客户端节点 ====== -->
+    <rect class="node neutral" x="60" y="100" width="140" height="56" />
+    <text class="label" x="130" y="126" text-anchor="middle">客户浏览器</text>
+    <text class="small" x="130" y="146" text-anchor="middle">全球 B2B 买家</text>
+
+    <rect class="node neutral" x="260" y="100" width="140" height="56" />
+    <text class="label" x="330" y="126" text-anchor="middle">供应商后台</text>
+    <text class="small" x="330" y="146" text-anchor="middle">德悟 / 瓦鲁</text>
+
+    <rect class="node neutral" x="460" y="100" width="140" height="56" />
+    <text class="label" x="530" y="126" text-anchor="middle">管理控制台</text>
+    <text class="small" x="530" y="146" text-anchor="middle">运营管理</text>
+
+    <rect class="node external" x="660" y="100" width="140" height="56" />
+    <text class="label" x="730" y="126" text-anchor="middle">Google Bot</text>
+    <text class="small" x="730" y="146" text-anchor="middle">SEO 爬虫</text>
+
+    <!-- CDN -->
+    <rect class="node neutral" x="860" y="100" width="150" height="56" />
+    <text class="label" x="935" y="126" text-anchor="middle">Cloudflare CDN</text>
+    <text class="small" x="935" y="146" text-anchor="middle">全球边缘加速</text>
+
+    <!-- ====== 应用层节点 ====== -->
+    <rect class="node process" x="60" y="240" width="160" height="64" />
+    <text class="label" x="140" y="268" text-anchor="middle">Next.js App</text>
+    <text class="small" x="140" y="288" text-anchor="middle">SSR · i18n · App Router</text>
+
+    <rect class="node process" x="280" y="240" width="160" height="64" />
+    <text class="label" x="360" y="268" text-anchor="middle">电商引擎</text>
+    <text class="small" x="360" y="288" text-anchor="middle">产品·询盘·报价·订单</text>
+
+    <rect class="node process" x="500" y="240" width="160" height="64" />
+    <text class="label" x="580" y="268" text-anchor="middle">认证 / 用户</text>
+    <text class="small" x="580" y="288" text-anchor="middle">Supabase Auth</text>
+
+    <rect class="node process" x="720" y="240" width="160" height="64" />
+    <text class="label" x="800" y="268" text-anchor="middle">内容管理</text>
+    <text class="small" x="800" y="288" text-anchor="middle">Sanity CMS</text>
+
+    <!-- 应用层 - 搜索 -->
+    <rect class="node process" x="150" y="320" width="200" height="56" />
+    <text class="label" x="250" y="348" text-anchor="middle">搜索服务 (Meilisearch)</text>
+    <text class="small" x="250" y="364" text-anchor="middle">工业品参数·全文搜索</text>
+
+    <rect class="node process" x="450" y="320" width="200" height="56" />
+    <text class="label" x="550" y="348" text-anchor="middle">静态生成 / ISR</text>
+    <text class="small" x="550" y="364" text-anchor="middle">产品页预渲染</text>
+
+    <rect class="node process" x="740" y="320" width="200" height="56" />
+    <text class="label" x="840" y="348" text-anchor="middle">Edge Functions</text>
+    <text class="small" x="840" y="364" text-anchor="middle">轻量 API · 表单处理</text>
+
+    <!-- ====== 数据层 ====== -->
+    <rect class="node storage" x="40" y="450" width="200" height="64" />
+    <text class="label" x="140" y="478" text-anchor="middle">Supabase (PostgreSQL)</text>
+    <text class="small" x="140" y="498" text-anchor="middle">产品 · 供应商 · 询盘 · 订单</text>
+
+    <rect class="node storage" x="280" y="450" width="190" height="64" />
+    <text class="label" x="375" y="478" text-anchor="middle">Supabase Storage</text>
+    <text class="small" x="375" y="498" text-anchor="middle">产品图片 · 资质文件</text>
+
+    <rect class="node storage" x="40" y="530" width="200" height="56" />
+    <text class="label" x="140" y="555" text-anchor="middle">Sanity 内容库</text>
+    <text class="small" x="140" y="571" text-anchor="middle">多语言产品描述 · 文章</text>
+
+    <!-- ====== AI 层 ====== -->
+    <rect class="node ai" x="530" y="450" width="200" height="64" />
+    <text class="label" x="630" y="478" text-anchor="middle">Vercel AI SDK</text>
+    <text class="small" x="630" y="498" text-anchor="middle">多模型路由 · Streaming</text>
+
+    <rect class="node ai" x="760" y="450" width="190" height="64" />
+    <text class="label" x="855" y="478" text-anchor="middle">向量 Embeddings</text>
+    <text class="small" x="855" y="498" text-anchor="middle">产品推荐 · 语义搜索</text>
+
+    <rect class="node ai" x="530" y="530" width="200" height="56" />
+    <text class="label" x="630" y="555" text-anchor="middle">内容生成 Pipeline</text>
+    <text class="small" x="630" y="571" text-anchor="middle">多语言 · SEO · 描述</text>
+
+    <rect class="node ai" x="760" y="530" width="190" height="56" />
+    <text class="label" x="855" y="555" text-anchor="middle">AI 询盘初筛</text>
+    <text class="small" x="855" y="571" text-anchor="middle">质量判断 · 自动回复</text>
+
+    <!-- ====== 外部节点 ====== -->
+    <rect class="node external" x="40" y="645" width="160" height="56" />
+    <text class="label" x="120" y="671" text-anchor="middle">OpenAI / Claude</text>
+    <text class="small" x="120" y="687" text-anchor="middle">LLM API · Embedding</text>
+
+    <rect class="node external" x="260" y="645" width="160" height="56" />
+    <text class="label" x="340" y="671" text-anchor="middle">Google APIs</text>
+    <text class="small" x="340" y="687" text-anchor="middle">Search · Analytics · Auth</text>
+
+    <rect class="node external" x="480" y="645" width="160" height="56" />
+    <text class="label" x="560" y="671" text-anchor="middle">WhatsApp API</text>
+    <text class="small" x="560" y="687" text-anchor="middle">客服 · 询盘通知</text>
+
+    <rect class="node external" x="700" y="645" width="160" height="56" />
+    <text class="label" x="780" y="671" text-anchor="middle">海关数据 API</text>
+    <text class="small" x="780" y="687" text-anchor="middle">买家画像</text>
+
+    <rect class="node external" x="40" y="725" width="200" height="56" />
+    <text class="label" x="140" y="751" text-anchor="middle">德悟供应商系统</text>
+    <text class="small" x="140" y="767" text-anchor="middle">联营 · API 对接</text>
+
+    <rect class="node external" x="300" y="725" width="200" height="56" />
+    <text class="label" x="400" y="751" text-anchor="middle">瓦鲁供应商系统</text>
+    <text class="small" x="400" y="767" text-anchor="middle">联营 · API 对接</text>
+
+    <!-- ====== 连接线 ====== -->
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+        <path d="M0,0 L8,3 L0,6 Z" fill="var(--line)" />
+      </marker>
+    </defs>
+
+    <!-- 客户端 → CDN → App -->
+    <path class="edge" marker-end="url(#arrow)" d="M130,156 L130,200 L140,200 L140,233" />
+    <path class="edge" marker-end="url(#arrow)" d="M730,156 L730,180 L840,180 L840,233" />
+    <path class="edge" marker-end="url(#arrow)" d="M935,156 L935,233" />
+
+    <!-- App → 内部服务 -->
+    <path class="edge" marker-end="url(#arrow)" d="M220,272 L273,272" />
+    <path class="edge" marker-end="url(#arrow)" d="M440,272 L493,272" />
+    <path class="edge" marker-end="url(#arrow)" d="M660,272 L713,272" />
+    <path class="edge" marker-end="url(#arrow)" d="M250,296 L250,313" />
+    <path class="edge" marker-end="url(#arrow)" d="M550,296 L550,313" />
+    <path class="edge" marker-end="url(#arrow)" d="M840,296 L840,313" />
+
+    <!-- 应用层 → 数据库 -->
+    <path class="edge" marker-end="url(#arrow)" d="M140,376 L140,443" />
+    <path class="edge" marker-end="url(#arrow)" d="M360,304 L360,370 L375,370 L375,443" />
+    <path class="edge" marker-end="url(#arrow)" d="M800,304 L800,370 L140,370 L140,523" />
+
+    <!-- 应用层 → AI -->
+    <path class="edge" marker-end="url(#arrow)" d="M550,376 L550,443" />
+    <path class="edge" marker-end="url(#arrow)" d="M630,443 L630,523" />
+    <path class="edge" marker-end="url(#arrow)" d="M855,443 L855,523" />
+
+    <!-- AI → 外部 LLM -->
+    <path class="edge" marker-end="url(#arrow)" d="M630,586 L630,610 L120,610 L120,638" />
+    <path class="edge" marker-end="url(#arrow)" d="M855,586 L855,610 L120,610 L120,638" />
+
+    <!-- 外部 API 连接 -->
+    <path class="edge" marker-end="url(#arrow)" d="M340,701 L340,718" />
+    <path class="edge" marker-end="url(#arrow)" d="M560,701 L560,718" />
+    <path class="edge" marker-end="url(#arrow)" d="M140,701 L140,718" />
+    <path class="edge" marker-end="url(#arrow)" d="M400,701 L400,718" />
+    <path class="edge" marker-end="url(#arrow)" d="M780,701 L780,718" />
+
+    <!-- 供应商回到应用层 -->
+    <path class="edge" marker-end="url(#arrow)" d="M330,156 L330,190 L360,190 L360,233" />
+  </svg>
+</main>
+</html>

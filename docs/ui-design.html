@@ -1,0 +1,292 @@
+<!doctype html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GlbBus — UI 设计方案</title>
+<style>
+  :root {
+    --bg: #f8fafc;
+    --fg: #0f172a;
+    --muted: #64748b;
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --accent: #7c3aed;
+    --border: #e2e8f0;
+    --card: #ffffff;
+    --success: #059669;
+    --warn: #d97706;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    padding: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 24px; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); margin-bottom: 24px; font-size: 14px; }
+  h2 { font-size: 16px; margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--primary); }
+  h3 { font-size: 14px; margin: 20px 0 10px; }
+
+  /* ====== Wireframe 容器 ====== */
+  .wf { position: relative; border: 1px solid var(--border); border-radius: 12px; background: var(--card); overflow: hidden; margin-bottom: 32px; }
+
+  .wf-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .wf-header .logo { font-size: 18px; font-weight: 700; color: var(--primary); }
+  .wf-header nav { display: flex; gap: 20px; font-size: 13px; color: var(--muted); }
+  .wf-header nav span:hover { color: var(--fg); cursor: default; }
+  .wf-header .lang { color: var(--muted); font-size: 13px; }
+
+  .wf-body { padding: 20px; }
+
+  /* ====== 首页 ====== */
+  .hero { background: linear-gradient(135deg, #1e40af, #7c3aed); color: white; border-radius: 12px; padding: 48px 36px; margin-bottom: 24px; }
+  .hero h1 { font-size: 28px; margin-bottom: 8px; color: white; }
+  .hero p { color: rgba(255,255,255,.75); font-size: 15px; margin-bottom: 20px; }
+  .hero .search-bar { display: flex; max-width: 480px; }
+  .hero .search-bar input { flex: 1; padding: 12px 16px; border: none; border-radius: 8px 0 0 8px; font-size: 14px; }
+  .hero .search-bar button { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 0 8px 8px 0; font-weight: 600; cursor: default; }
+
+  .brand-strip { display: flex; gap: 16px; margin-bottom: 24px; align-items: center; }
+  .brand-strip .label { color: var(--muted); font-size: 12px; white-space: nowrap; }
+  .brand-strip .badges { display: flex; gap: 24px; }
+  .brand-strip .badge { background: var(--border); border-radius: 6px; padding: 6px 14px; font-size: 12px; font-weight: 600; color: var(--fg); }
+
+  .section-title { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+
+  .cat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 24px; }
+  .cat-card { border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
+  .cat-card .icon { font-size: 24px; margin-bottom: 6px; }
+  .cat-card .name { font-weight: 600; font-size: 13px; }
+  .cat-card .count { font-size: 11px; color: var(--muted); }
+
+  .prod-row { display: flex; gap: 14px; margin-bottom: 24px; }
+  .prod-card { border: 1px solid var(--border); border-radius: 8px; padding: 12px; width: 200px; }
+  .prod-card .img { height: 120px; background: var(--border); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+  .prod-card .name { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+  .prod-card .supplier { font-size: 11px; color: var(--muted); }
+  .prod-card .price { font-size: 14px; font-weight: 700; color: var(--primary); margin-top: 8px; }
+  .prod-card .cert { font-size: 10px; color: var(--success); }
+
+  .trust-strip { display: flex; gap: 24px; padding: 20px; border: 1px solid var(--border); border-radius: 8px; justify-content: center; }
+  .trust-item { text-align: center; }
+  .trust-item .icon { font-size: 20px; }
+  .trust-item .label { font-size: 11px; color: var(--muted); }
+
+  /* ====== 产品详情页 ====== */
+  .breadcrumb { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+  .breadcrumb span { margin: 0 4px; }
+
+  .detail-layout { display: flex; gap: 24px; }
+  .detail-gallery { width: 400px; flex-shrink: 0; }
+  .detail-gallery .main-img { height: 280px; background: var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .detail-gallery .thumbs { display: flex; gap: 6px; }
+  .detail-gallery .thumbs div { width: 56px; height: 56px; background: var(--border); border-radius: 6px; font-size: 9px; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+
+  .detail-info { flex: 1; }
+  .detail-info h1 { font-size: 22px; margin-bottom: 6px; }
+  .detail-info .sku { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .detail-info .supplier-tag { display: inline-block; background: var(--primary-light); color: var(--primary); padding: 2px 10px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+
+  .spec-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  .spec-table td { padding: 6px 8px; border: 1px solid var(--border); font-size: 12px; }
+  .spec-table td:first-child { font-weight: 600; width: 35%; background: #f8fafc; }
+
+  .action-bar { display: flex; gap: 10px; margin: 16px 0; }
+  .action-bar .btn-primary { background: var(--primary); color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 600; cursor: default; }
+  .action-bar .btn-outline { border: 1px solid var(--primary); color: var(--primary); padding: 10px 24px; border-radius: 8px; font-weight: 600; background: white; cursor: default; }
+  .action-bar .btn-whatsapp { background: #25D366; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: default; }
+
+  .cert-list { display: flex; gap: 8px; margin: 12px 0; }
+  .cert-list .cert-badge { background: var(--border); padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+
+  .inquiry-form { border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-top: 24px; }
+  .inquiry-form h3 { font-size: 15px; margin-bottom: 12px; }
+  .inquiry-form .row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .inquiry-form input, .inquiry-form textarea { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+  .inquiry-form textarea { min-height: 60px; }
+
+  /* 脚注 */
+  .footer-note { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); text-align: center; }
+</style>
+
+<h1>GlbBus — UI 设计原型</h1>
+<p class="subtitle">B2B 工业品跨境电商平台 · 首页 &amp; 产品详情页 · Wireframe 方案</p>
+
+<!-- ========== 首页 ========== -->
+<h2>🏠 首页（Home Page）</h2>
+
+<div class="wf">
+  <div class="wf-header">
+    <div class="logo">GlbBus</div>
+    <nav>
+      <span style="color:var(--fg);font-weight:600">Products</span>
+      <span>Suppliers</span>
+      <span>About</span>
+      <span>Contact</span>
+    </nav>
+    <div class="lang">🌐 EN</div>
+  </div>
+
+  <div class="wf-body">
+    <!-- Hero -->
+    <div class="hero">
+      <h1>Industrial Products, Sourced Globally</h1>
+      <p>Connect with verified manufacturers for your B2B industrial needs.<br />AI-powered matching, real-time quotes, end-to-end support.</p>
+      <div class="search-bar">
+        <input placeholder="Search by product name, material, spec..." />
+        <button>Search</button>
+      </div>
+    </div>
+
+    <!-- 供应商品牌 -->
+    <div class="brand-strip">
+      <span class="label">Trusted Suppliers:</span>
+      <div class="badges">
+        <span class="badge">🔧 Dewu Industrial</span>
+        <span class="badge">⚙️ Waru Manufacturing</span>
+      </div>
+    </div>
+
+    <!-- 分类 -->
+    <div class="section-title">Product Categories</div>
+    <div class="cat-grid">
+      <div class="cat-card"><div class="icon">🏗️</div><div class="name">Aluminum Profiles</div><div class="count">42 products</div></div>
+      <div class="cat-card"><div class="icon">🔩</div><div class="name">Fasteners &amp; Hardware</div><div class="count">38 products</div></div>
+      <div class="cat-card"><div class="icon">⚡</div><div class="name">Electrical Components</div><div class="count">27 products</div></div>
+      <div class="cat-card"><div class="icon">⛓️</div><div class="name">Industrial Machinery</div><div class="count">19 products</div></div>
+    </div>
+
+    <!-- 产品推荐 -->
+    <div class="section-title">Featured Products</div>
+    <div class="prod-row">
+      <div class="prod-card">
+        <div class="img">📷 Product Image</div>
+        <div class="name">6063-T5 Aluminum Extrusion</div>
+        <div class="supplier">Dewu Industrial</div>
+        <div class="price">$2.45/kg</div>
+        <div class="cert">✅ CE · RoHS</div>
+      </div>
+      <div class="prod-card">
+        <div class="img">📷 Product Image</div>
+        <div class="name">Stainless Steel 304 Flange</div>
+        <div class="supplier">Waru Manufacturing</div>
+        <div class="price">$0.89/pc</div>
+        <div class="cert">✅ ISO 9001</div>
+      </div>
+      <div class="prod-card">
+        <div class="img">📷 Product Image</div>
+        <div class="name">CNC Machined Bracket</div>
+        <div class="supplier">Dewu Industrial</div>
+        <div class="price">$1.23/pc</div>
+        <div class="cert">✅ RoHS</div>
+      </div>
+      <div class="prod-card">
+        <div class="img">📷 Product Image</div>
+        <div class="name">Industrial Conveyor Belt</div>
+        <div class="supplier">Waru Manufacturing</div>
+        <div class="price">$34.00/m</div>
+        <div class="cert">✅ CE</div>
+      </div>
+    </div>
+
+    <!-- 信任展示条 -->
+    <div class="trust-strip">
+      <div class="trust-item"><div class="icon">✅</div><div class="label">Factory Verified</div></div>
+      <div class="trust-item"><div class="icon">📋</div><div class="label">On-time Delivery</div></div>
+      <div class="trust-item"><div class="icon">🌍</div><div class="label">Global Shipping</div></div>
+      <div class="trust-item"><div class="icon">🤖</div><div class="label">AI Match</div></div>
+      <div class="trust-item"><div class="icon">🔒</div><div class="label">Secure Payments</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 产品详情页 ========== -->
+<h2>📄 产品详情页（Product Detail Page）</h2>
+
+<div class="wf">
+  <div class="wf-header">
+    <div class="logo" style="font-size:15px">GlbBus</div>
+    <nav style="font-size:12px">
+      <span>Products</span>
+      <span>Categories</span>
+      <span>Inquiry List</span>
+    </nav>
+    <div class="lang">🌐 EN</div>
+  </div>
+
+  <div class="wf-body">
+    <div class="breadcrumb">Home <span>&gt;</span> Aluminum Profiles <span>&gt;</span> 6063-T5 Extrusion</div>
+
+    <div class="detail-layout">
+      <!-- 左：图片 -->
+      <div class="detail-gallery">
+        <div class="main-img">📷 Main Product Image</div>
+        <div class="thumbs">
+          <div>📷</div><div>📷</div><div>📷</div><div>📷</div>
+        </div>
+      </div>
+
+      <!-- 右：信息 -->
+      <div class="detail-info">
+        <h1>6063-T5 Aluminum Extrusion Profile</h1>
+        <div class="sku">SKU: DW-EXT-6063T5-2024</div>
+        <div class="supplier-tag">🔧 Dewu Industrial</div>
+
+        <table class="spec-table">
+          <tr><td>Material</td><td>Aluminum 6063-T5</td></tr>
+          <tr><td>Surface Finish</td><td>Anodized / Powder Coated</td></tr>
+          <tr><td>Length</td><td>Custom (max 6m)</td></tr>
+          <tr><td>MOQ</td><td>500 pcs</td></tr>
+          <tr><td>Lead Time</td><td>15-20 days</td></tr>
+          <tr><td>FOB Port</td><td>Shanghai / Ningbo</td></tr>
+        </table>
+
+        <div class="cert-list">
+          <span class="cert-badge">CE</span>
+          <span class="cert-badge">RoHS</span>
+          <span class="cert-badge">ISO 9001</span>
+        </div>
+
+        <div class="action-bar">
+          <button class="btn-primary">📩 Send Inquiry</button>
+          <button class="btn-whatsapp">💬 WhatsApp</button>
+          <button class="btn-outline">📋 Request Quote</button>
+        </div>
+
+        <!-- 询盘表单 -->
+        <div class="inquiry-form">
+          <h3>Send Inquiry</h3>
+          <div class="row">
+            <input placeholder="Your Name" />
+            <input placeholder="Email" />
+            <input placeholder="Country" />
+          </div>
+          <div class="row">
+            <input placeholder="Quantity" style="width:120px" />
+          </div>
+          <textarea placeholder="Tell us your requirements — spec, quantity, delivery timeline..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 设计说明 ========== -->
+<h2>🎨 设计说明</h2>
+
+<table class="spec-table" style="max-width:700px">
+  <tr><td style="width:180px">配色方案</td><td>蓝色 #2563eb (主色) + 紫色 #7c3aed (渐变) — 科技感、信任感、全球感</td></tr>
+  <tr><td>字体</td><td>系统无衬线字体，以加载速度优先</td></tr>
+  <tr><td>布局原则</td><td>清晰的信息层级，B2B买家不需要花哨设计，要快速找到产品和参数</td></tr>
+  <tr><td>供应商标识</td><td>每个产品卡标注供应商，建立品牌信任</td></tr>
+  <tr><td>询盘优先</td><td>产品详情页直接嵌入询盘表单，不跳转——减少转化流失</td></tr>
+  <tr><td>多语言</td><td>顶部语言切换器，每个页面的文案用 i18n 管理</td></tr>
+  <tr><td>响应式</td><td>下阶段补充移动端/平板适配方案</td></tr>
+</table>
+
+<div class="footer-note">
+  GlbBus UI Wireframe v1 — Next.js + Tailwind CSS 实现
+</div>
+</html>
