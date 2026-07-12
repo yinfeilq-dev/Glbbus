@@ -1,15 +1,31 @@
-// 首页 —— 营销落地页
+/**
+ * 首页 —— 营销落地页（多语言支持）
+ */
+
+import { type Locale, locales } from "@/i18n/config";
+import { loadDictionary, t } from "@/i18n/load-dictionary";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import ProductCard from "@/components/product/product-card";
 import { createClient } from "@/lib/supabase/server";
+import { notFound } from "next/navigation";
 
-export const dynamic = "force-dynamic";
+type Props = {
+  params: Promise<{ locale: string }>;
+};
 
-export default async function HomePage() {
+export default async function HomePage({ params }: Props) {
+  const { locale } = await params;
+
+  if (!locales.includes(locale as Locale)) {
+    notFound();
+  }
+
+  const l = locale as Locale;
+  const dict = await loadDictionary(l);
+
   const supabase = await createClient();
 
-  // 取已发布的产品 + 供应商名称
   const { data: products } = await supabase
     .from("products")
     .select("*, suppliers(name)")
@@ -18,25 +34,24 @@ export default async function HomePage() {
 
   return (
     <>
-      <Header />
+      <Header locale={l} dict={dict} />
       <main>
         {/* Hero */}
         <section className="bg-gradient-to-br from-blue-700 to-violet-600 text-white">
           <div className="mx-auto max-w-7xl px-4 py-20">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-              Industrial Products, Sourced Globally
+              {t(dict, "home.hero_title")}
             </h1>
             <p className="mt-4 max-w-xl text-lg text-white/75">
-              Connect with verified manufacturers for your B2B industrial needs.
-              AI-powered matching, real-time quotes, end-to-end support.
+              {t(dict, "home.hero_subtitle")}
             </p>
             <div className="mt-8 flex max-w-lg">
               <input
-                placeholder="Search by product name, material, spec..."
+                placeholder={t(dict, "common.search_placeholder")}
                 className="w-full rounded-l-lg border-0 px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400"
               />
               <button className="rounded-r-lg bg-blue-600 px-6 py-3 text-sm font-semibold hover:bg-blue-700">
-                Search
+                {t(dict, "common.search_button")}
               </button>
             </div>
           </div>
@@ -45,7 +60,9 @@ export default async function HomePage() {
         {/* 供应商品牌 */}
         <section className="mx-auto max-w-7xl px-4 py-6">
           <div className="flex items-center gap-4">
-            <span className="text-xs text-slate-400">Trusted Suppliers:</span>
+            <span className="text-xs text-slate-400">
+              {t(dict, "common.trusted_suppliers")}
+            </span>
             <div className="flex gap-3">
               <span className="rounded-md bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">
                 🔧 Dewu Industrial
@@ -59,13 +76,16 @@ export default async function HomePage() {
 
         {/* 分类 */}
         <section className="mx-auto max-w-7xl px-4 py-8">
-          <h2 className="mb-6 text-xl font-bold text-slate-900">Product Categories</h2>
+          <h2 className="mb-6 text-xl font-bold text-slate-900">
+            {t(dict, "home.categories_title")}
+          </h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
-              { icon: "🏗️", name: "Aluminum Profiles", count: "42 products" },
-              { icon: "🔩", name: "Fasteners & Hardware", count: "38 products" },
-              { icon: "⚡", name: "Electrical Components", count: "27 products" },
-              { icon: "⛓️", name: "Industrial Machinery", count: "19 products" },
+              { icon: "🏗️", name: t(dict, "common.site_tagline").includes("Industrial")
+                ? "Aluminum Profiles" : "铝型材", count: "42" },
+              { icon: "🔩", name: "Fasteners & Hardware", count: "38" },
+              { icon: "⚡", name: "Electrical Components", count: "27" },
+              { icon: "⛓️", name: "Industrial Machinery", count: "19" },
             ].map((cat) => (
               <div
                 key={cat.name}
@@ -73,7 +93,7 @@ export default async function HomePage() {
               >
                 <div className="mb-1 text-2xl">{cat.icon}</div>
                 <div className="text-sm font-semibold text-slate-900">{cat.name}</div>
-                <div className="mt-0.5 text-xs text-slate-400">{cat.count}</div>
+                <div className="mt-0.5 text-xs text-slate-400">{cat.count} products</div>
               </div>
             ))}
           </div>
@@ -81,19 +101,22 @@ export default async function HomePage() {
 
         {/* 产品推荐 */}
         <section className="mx-auto max-w-7xl px-4 py-8">
-          <h2 className="mb-6 text-xl font-bold text-slate-900">Featured Products</h2>
+          <h2 className="mb-6 text-xl font-bold text-slate-900">
+            {t(dict, "home.featured_title")}
+          </h2>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {products && products.length > 0 ? (
               products.map((p) => (
                 <ProductCard
                   key={p.id}
                   product={p}
+                  locale={l}
+                  dict={dict}
                   supplierName={(p as any).suppliers?.name}
                 />
               ))
             ) : (
               <>
-                {/* 无数据时展示占位卡片 */}
                 {[
                   {
                     name: "6063-T5 Aluminum Extrusion",
@@ -158,11 +181,11 @@ export default async function HomePage() {
         <section className="mx-auto max-w-7xl px-4 py-10">
           <div className="flex flex-wrap justify-center gap-8 rounded-xl border border-slate-200 py-6">
             {[
-              { icon: "✅", label: "Factory Verified" },
-              { icon: "📋", label: "On-time Delivery" },
-              { icon: "🌍", label: "Global Shipping" },
-              { icon: "🤖", label: "AI Match" },
-              { icon: "🔒", label: "Secure Payments" },
+              { icon: "✅", label: t(dict, "common.factory_verified") },
+              { icon: "📋", label: t(dict, "common.on_time_delivery") },
+              { icon: "🌍", label: t(dict, "common.global_shipping") },
+              { icon: "🤖", label: t(dict, "common.ai_match") },
+              { icon: "🔒", label: t(dict, "common.secure_payments") },
             ].map((item) => (
               <div key={item.label} className="text-center">
                 <div className="text-xl">{item.icon}</div>
@@ -172,7 +195,7 @@ export default async function HomePage() {
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer locale={l} dict={dict} />
     </>
   );
 }
