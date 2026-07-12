@@ -34,6 +34,18 @@ type GeneratedTarget = {
 const STATUS_OPTIONS = ["new", "contacted", "replied", "meeting", "closed_won", "closed_lost"];
 const SOURCE_OPTIONS = ["Google", "LinkedIn", "Alibaba", "TradeShow", "Referral", "Manual", "Other"];
 
+const LINKEDIN_MESSAGE_TEMPLATE = `Hi {contact_name},
+
+I came across {company_name} and noticed your work in the {industry} space.
+
+We're GlbBus (www.koudingcloud.com), an AI-driven B2B platform for industrial products — aluminum profiles, fasteners, electrical components, and CNC/machining parts.
+
+Would love to connect and explore potential synergies.
+
+Best,
+Yin
+GlbBus`;
+
 const EMAIL_TEMPLATES: Record<string, { subject: string; body: string }> = {
   en_intro: {
     subject: "Partnership Opportunity with GlbBus — Quality Industrial Products",
@@ -440,6 +452,16 @@ export default function TargetsPage() {
                   <td className="px-3 py-2">
                     <div className="flex gap-1">
                       <button
+                        onClick={() => {
+                          const query = encodeURIComponent(`${lead.company_name} ${lead.industry || ""} ${lead.country || ""}`);
+                          window.open(`https://www.linkedin.com/search/results/companies/?keywords=${query}`, '_blank');
+                        }}
+                        className="rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] text-indigo-600 hover:bg-indigo-100"
+                        title="在 LinkedIn 上搜索该公司"
+                      >
+                        💼
+                      </button>
+                      <button
                         onClick={() => setShowTemplate({ lead, lang: "en" })}
                         className="rounded bg-blue-50 px-1.5 py-0.5 text-[10px] text-blue-600 hover:bg-blue-100"
                         title="生成开发信"
@@ -654,7 +676,46 @@ export default function TargetsPage() {
               <DetailRow label="下次行动日期" value={detailLead.next_action_date} />
             </div>
 
-            <div className="mt-6 flex justify-end gap-2">
+            {/* LinkedIn 操作区 */}
+            <div className="mt-4 rounded-lg border border-indigo-100 bg-indigo-50 p-3">
+              <h3 className="mb-2 text-xs font-semibold text-indigo-700">💼 LinkedIn 触达</h3>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => {
+                    const query = encodeURIComponent(`${detailLead.company_name} ${detailLead.industry || ""} ${detailLead.country || ""}`);
+                    window.open(`https://www.linkedin.com/search/results/companies/?keywords=${query}`, '_blank');
+                  }}
+                  className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700"
+                >
+                  🔍 搜索公司
+                </button>
+                <button
+                  onClick={() => {
+                    const name = detailLead.contact_name || detailLead.company_name;
+                    window.open(`https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(name + " " + (detailLead.industry || ""))}`, '_blank');
+                  }}
+                  className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-700"
+                >
+                  👤 搜索联系人
+                </button>
+                <button
+                  onClick={async () => {
+                    const lead = detailLead;
+                    const msg = LINKEDIN_MESSAGE_TEMPLATE
+                      .replace(/{contact_name}/g, lead.contact_name || "Team at " + lead.company_name)
+                      .replace(/{company_name}/g, lead.company_name)
+                      .replace(/{industry}/g, lead.industry || "industrial products");
+                    await navigator.clipboard.writeText(msg);
+                    alert("LinkedIn InMail 模板已复制到剪贴板！\n\n去 LinkedIn 发送连接请求或 InMail 时粘贴即可。");
+                  }}
+                  className="rounded-lg border border-indigo-300 bg-white px-3 py-1.5 text-xs font-medium text-indigo-600 hover:bg-indigo-100"
+                >
+                  📋 复制 InMail 模板
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 flex justify-end gap-2">
               <button
                 onClick={() => {
                   setShowTemplate({ lead: detailLead, lang: "en" });
