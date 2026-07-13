@@ -1,6 +1,9 @@
-# GlbBus 操作手册
+# GlbBus 跨境电商操作手册
 
-> B2B 工业品跨境电商平台 — 全球多语言产品展示 + AI 询盘系统
+> B2B 工业品跨境电商平台 — 全链路运营手册
+> 
+> 供应商：德悟（铝型材/紧固件/电气/CNC）· 瓦鲁（管件/法兰/电机/气动）
+> 覆盖市场：东欧 · 北美 · 拉美 · 东南亚 · 中东
 >
 > 技术栈：Next.js 16 · Supabase · Vercel AI SDK · Tailwind 4
 
@@ -8,605 +11,573 @@
 
 ## 目录
 
-1. [快速启动](#1-快速启动)
-2. [项目架构](#2-项目架构)
-3. [部署指南](#3-部署指南)
-4. [产品管理](#4-产品管理)
-5. [多语言翻译管理](#5-多语言翻译管理)
-6. [供应商管理](#6-供应商管理)
-7. [询盘管理](#7-询盘管理)
-8. [AI 内容生成](#8-ai-内容生成)
-9. [数据录入脚本](#9-数据录入脚本)
-10. [API 接口文档](#10-api-接口文档)
-11. [邮件营销配置](#11-邮件营销配置)
-
-## 1. 快速启动
-
-### 1.1 环境要求
-
-- Node.js ≥ 20
-- npm 或 pnpm
-- Supabase 项目（已创建）
-- OpenAI API Key（可选，用于 AI 描述生成）
-
-### 1.2 本地启动
-
-```bash
-# 进入项目目录
-cd 01-Dev/06-GlbBus
-
-# 安装依赖
-npm install
-
-# 配置环境变量（已配置好，可跳过）
-# .env.local 包含 Supabase URL 和 anon key
-
-# 启动开发服务器
-npm run dev
-
-# 访问
-open http://localhost:3000
-```
-
-### 1.3 生产构建
-
-```bash
-npm run build
-npm start
-```
-
-### 1.4 测试环境验证
-
-| 测试项 | 访问地址 | 预期 |
-|--------|----------|------|
-| 英文首页 | `http://localhost:3000/en` | ✅ 200 |
-| 中文首页 | `http://localhost:3000/zh` | ✅ 200 |
-| 阿拉伯语 | `http://localhost:3000/ar` | ✅ 200（RTL 布局） |
-| 根路径 | `http://localhost:3000/` | ✅ 307 → 自动重定向 |
-| 产品列表 | `http://localhost:3000/en/products` | ✅ 40 个产品 |
-| 产品详情 | `http://localhost:3000/en/products/DW-EXT-6063T5-001` | ✅ 详情页 |
-| 语言切换 | Header 下拉框切换语言 | ✅ 刷新页面切换 |
+- [第一部分：运营总览](#第一部分运营总览)
+- [第二部分：站内运营](#第二部分站内运营)
+- [第三部分：客户开发（核心工作流）](#第三部分客户开发核心工作流)
+- [第四部分：LinkedIn 精准触达 SOP](#第四部分linkedin-精准触达-sop)
+- [第五部分：开发信策略与模板](#第五部分开发信策略与模板)
+- [第六部分：询盘跟进 SOP](#第六部分询盘跟进-sop)
+- [第七部分：产品管理与上架](#第七部分产品管理与上架)
+- [第八部分：多语言运营](#第八部分多语言运营)
+- [第九部分：技术运维](#第九部分技术运维)
+- [附录：快捷查询](#附录快捷查询)
 
 ---
 
-## 2. 项目架构
+# 第一部分：运营总览
 
-```
-src/
-├── app/
-│   ├── [locale]/              ← 多语言路由（中/英/俄/西/阿）
-│   │   ├── layout.tsx         ← 语言级布局（lang, dir）
-│   │   ├── page.tsx           ← 首页
-│   │   ├── products/
-│   │   │   ├── page.tsx       ← 产品列表页
-│   │   │   └── [slug]/page.tsx ← 产品详情页
-│   ├── api/
-│   │   ├── inquiries/route.ts       ← POST 询盘提交
-│   │   └── generate-description/route.ts ← POST AI 描述生成
-│   ├── layout.tsx             ← 根布局（shell 壳）
-│   └── globals.css
-│
-├── components/
-│   ├── layout/
-│   │   ├── header.tsx         ← 导航 + 语言切换
-│   │   └── footer.tsx         ← 页脚
-│   └── product/
-│       ├── product-card.tsx   ← 产品卡片
-│       └── inquiry-form.tsx   ← 询盘表单
-│
-├── i18n/
-│   ├── config.ts              ← 语言配置（5语言代码/名称/RTL）
-│   ├── load-dictionary.ts     ← 字典加载 + t() 翻译函数
-│   └── dictionaries/          ← 5 语言翻译 JSON
-│       ├── en.json
-│       ├── zh.json
-│       ├── ru.json
-│       ├── es.json
-│       └── ar.json
-│
-├── lib/
-│   ├── ai.ts                  ← AI SDK 配置 + 多语言生成 Pipeline
-│   ├── types.ts               ← 数据库类型定义
-│   └── supabase/
-│       ├── client.ts          ← 浏览器端 Supabase 客户端
-│       └── server.ts          ← 服务端 Supabase 客户端
-│
-├── middleware.ts              ← 语言检测重定向
-└── env.ts                     ← 环境变量验证
+## 1.1 平台定位
 
-scripts/                       ← 数据录入 & 生成脚本
-├── seed-products.ts           ← 产品批量录入
-├── generate-descriptions.ts   ← AI 描述生成（需要 OpenAI API）
-└── generate-descriptions-rule.ts ← 模板规则描述生成（离线可用）
-```
+**GlbBus** 是一个面向全球 B2B 买家的工业品选品与采购平台，AI 驱动全链路运营。核心价值：
 
----
+- **买家侧**：多语言产品展示 + 快速询盘 + AI 辅助选品
+- **运营侧**：AI 生成目标客户 + LinkedIn 触达 + 开发信营销 + 询盘管理
 
-## 3. 部署指南
+## 1.2 当前供应商与市场矩阵
 
-### 3.1 Vercel 部署（推荐）
+| 供应商 | 主营品类 | 目标市场 | 当前产品数 | 联营方式 |
+|--------|----------|----------|-----------|----------|
+| **德悟** · Dewu Industrial | 铝型材、紧固件、电气元器件、CNC 机加工件 | 东欧、北美、拉美 | 20 | 联营 |
+| **瓦鲁** · Waru Manufacturing | 管件、法兰、电机、气动、密封件、液压 | 东南亚、中东 | 20 | 联营 |
 
-```bash
-# 1. 安装 Vercel CLI
-npm i -g vercel
+## 1.3 运营核心指标
 
-# 2. 登录
-vercel login
-
-# 3. 部署
-cd 01-Dev/06-GlbBus
-vercel
-
-# 4. 设置环境变量（Vercel Dashboard → Settings → Environment Variables）
-NEXT_PUBLIC_SUPABASE_URL=...
-NEXT_PUBLIC_SUPABASE_ANON_KEY=...
-OPENAI_API_KEY=...           # 可选，用于 AI 描述生成
-```
-
-### 3.2 自定义域名
-
-在 Vercel Dashboard 中：
-1. 进入项目 → **Settings** → **Domains**
-2. 输入你的域名（如 `glbbus.com`）
-3. 在域名 DNS 管理面板中添加 Vercel 提供的 CNAME 记录
-4. 等待 SSL 证书自动签发（~几分钟）
-
-**多语言 SEO 优化：** 多语言路由会自动产生 `/en/`、`/zh/`、`/ru/` 等路径，搜索引擎会视为独立页面。
-
-### 3.3 环境变量清单
-
-| 变量名 | 必填 | 说明 |
-|--------|------|------|
-| `NEXT_PUBLIC_SUPABASE_URL` | ✅ | Supabase 项目 URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | Supabase 匿名 Key |
-| `OPENAI_API_KEY` | ❌ | OpenAI API Key（AI 描述生成） |
-
----
-
-## 4. 产品管理
-
-### 4.1 数据库表结构
-
-#### `products` 表
-
-| 字段 | 类型 | 说明 |
+| 指标 | 当前 | 说明 |
 |------|------|------|
-| `id` | UUID | 主键 |
-| `supplier_id` | UUID | 供应商外键 |
-| `sku` | TEXT | 唯一产品编码 |
-| `name_en` | TEXT | 英文名 |
-| `name_zh` | TEXT | 中文名 |
-| `description` | JSONB | 多语言描述 `{en, zh, ru, es, ar}` |
-| `specifications` | JSONB | 规格参数键值对 |
-| `base_price` | NUMERIC | 基础单价 |
-| `category` | TEXT | 分类 |
-| `images` | JSONB | 图片 URL 数组 |
-| `certifications` | JSONB | 认证列表 |
-| `moq` | INTEGER | 最小起订量 |
-| `lead_time_days` | INTEGER | 交期（天） |
-| `fob_port` | TEXT | FOB 港口 |
-| `is_published` | BOOLEAN | 是否上架 |
+| 在线产品数 | 40 | 需持续扩充 |
+| 目标客户线索 | — | 每周至少 AI 生成 2-3 批 |
+| 已发送开发信 | — | 每封记录在 leads 表 |
+| LinkedIn 连接数 | — | 每日 10-20 个连接请求 |
+| 询盘转化 | — | 从线索 → 询盘的转化率 |
 
-### 4.2 添加新产品
+## 1.4 日常运营节奏（建议）
 
-**方式一：通过 Supabase Dashboard（推荐）**
+```
+工作日：
+上午 09:00 — 查看询盘 / 回复客户
+上午 10:00 — AI 生成+筛选目标客户（15分钟）
+上午 10:30 — LinkedIn 触达（20-30分钟）
+下午 14:00 — 跟进已有线索 + 发送开发信
+下午 15:30 — 产品管理 + 数据录入
+下午 17:00 — 复盘当天工作，更新线索状态
 
-1. 登录 [Supabase Dashboard](https://supabase.com)
-2. 选择项目 → **Table Editor** → **products**
-3. 点击 **Insert row**
-4. 填写字段，注意：
-   - `sku` 必须唯一，格式建议 `{供应商前缀}-{类别缩写}-{序号}`（如 `DW-EXT-6063T5-001`）
-   - `description` 是 JSON 对象：`{"en": "...", "zh": "...", "ru": "...", "es": "...", "ar": "..."}`
-   - `specifications` 是 JSON 对象：`{"material": "Aluminum 6063-T5", "length": "6m"}`
-   - `images` 是 JSON 数组：`[]`
-   - `certifications` 是 JSON 数组：`["CE", "RoHS"]`
-
-**方式二：使用数据录入脚本**
-
-```bash
-# 编辑 scripts/seed-products.ts，在对应供应商数组中添加新产品条目
-# 然后运行：
-npx tsx scripts/seed-products.ts
+每周：
+周一 — 生成本周目标客户清单
+周三 — 集中发送开发信
+周五 — 复盘成交率，调整策略
 ```
 
-### 4.3 SKU 编码规范
+---
+
+# 第二部分：站内运营
+
+## 2.1 访问前台
+
+| 测试项 | 地址 |
+|--------|------|
+| 英文首页 | `/en` |
+| 中文首页 | `/zh` |
+| 俄文首页 | `/ru` |
+| 西语首页 | `/es` |
+| 阿拉伯语首页 | `/ar` |
+| 产品列表 | `/en/products` |
+| 产品详情 | `/en/products/{sku}` |
+
+## 2.2 登录管理后台
+
+**地址：** `/admin/dashboard`
+**密码：** `glbbus2026`
+
+管理后台包含 5 个 Tab：
+
+| Tab | 功能 |
+|-----|------|
+| 📦 批量录入 | 粘贴 JSON 批量导入产品 |
+| 🏭 供应商 | 查看 / 添加供应商 |
+| 📋 产品列表 | 按供应商筛选产品 |
+| 📩 询盘管理 | 查看买家询盘（new / contacted / closed） |
+| **🎯 客户开发** | **核心工作区：AI 生成线索 + 表格管理 + 开发信 + LinkedIn** |
+
+---
+
+# 第三部分：客户开发（核心工作流）
+
+> 所有操作在 `/admin/dashboard` → **🎯 客户开发** Tab 中完成
+
+## 3.1 工作流全景
+
+```
+① AI 生成目标客户
+   ↓
+② 添加为线索 → 表格出现
+   ↓
+③ 搜索 LinkedIn（💼按钮）
+   ↓
+④ 找到关键联系人
+   ↓
+⑤ 发送连接请求（右侧匹配）
+    或 发送开发信（✉️按钮）
+   ↓
+⑥ 对方回复 → 状态改为 contacted / replied
+   ↓
+⑦ 建交 → meeting / closed_won
+```
+
+## 3.2 AI 生成目标客户
+
+**位置：** 页面顶部蓝色区块「🤖 AI 生成目标客户」
+
+**操作步骤：**
+1. 输入**行业**（如 `aluminum profiles`, `fasteners`, `CNC machining`）
+2. 输入**国家**（如 `Germany`, `Mexico`, `Thailand`）
+3. 点击 **"AI 生成"**
+4. 系统返回 10 条目标客户描述
+5. 逐条点击 **"+ 添加为线索"**
+
+> 建议每天生成 2-3 个不同行业+国家组合，持续积累线索
+
+## 3.3 手动添加线索
+
+点击 **"+ 添加线索"**，填写：
+- 公司名（必填）
+- 联系人、邮箱、电话
+- 国家、来源（LinkedIn / Google / TradeShow 等）
+- 行业、网站
+
+## 3.4 线索状态管理
+
+每行线索右侧有状态下拉框：
+
+| 状态 | 含义 | 下一步 |
+|------|------|--------|
+| `new` | 新线索，未接触 | LinkedIn 搜索 / 准备开发信 |
+| `contacted` | 已发开发信 | 等待回复，3天后跟进 |
+| `replied` | 对方已回复 | 切换模式，深入沟通 |
+| `meeting` | 约了会议或视频 | 准备产品资料和报价 |
+| `closed_won` | 成交 | 维护关系，介绍其他产品 |
+| `closed_lost` | 放弃 | 记录原因，避免重复联系 |
+
+## 3.5 查看线索详情
+
+点击**公司名** → 弹出详情弹窗，显示：
+- 全部联系信息
+- 已发邮件数 + 上次时间
+- LinkedIn 触达操作区（见第四部分）
+- 快捷跳转到开发信
+
+## 3.6 筛选与统计
+
+顶部状态筛选按钮（All / new / contacted / ...），每个状态右侧显示计数。
+顶部统计卡片一目了然各阶段的线索数量。
+
+---
+
+# 第四部分：LinkedIn 精准触达 SOP
+
+> LinkedIn 是 B2B 工业品获客效率最高的渠道之一。
+
+## 4.1 系统内 LinkedIn 快捷操作
+
+你不需要离开 GlbBus 后台就能完成 LinkedIn 的准备工作。
+
+**在表格中的每一行：**
+- 点击 **💼** 按钮 → 自动在新标签页打开 LinkedIn 公司搜索，关键词已填入
+
+**在详情弹窗的「💼 LinkedIn 触达」区域：**
+
+| 按钮 | 功能 |
+|------|------|
+| 🔍 搜索公司 | LinkedIn 公司搜索结果页 |
+| 👤 搜索联系人 | LinkedIn 人物搜索结果页 |
+| 📋 复制 InMail 模板 | 复制一段 LinkedIn InMail 消息 → 去 LinkedIn 发送连接请求时粘贴 |
+
+## 4.2 LinkedIn 完整操作流程
+
+```
+第一步：在 GlbBus 后台锁定目标公司
+   ↓ 点 💼 或 🔍 搜索公司
+第二步：在公司页面找"采购/供应链/运营"负责人
+   ↓ 点 People 或搜索
+第三步：发送连接请求（带个性化备注）
+   ↓ 对方通过后
+第四步：发送 InMail / 在消息中沟通
+```
+
+## 4.3 找谁联系最有效？
+
+在 B2B 工业品领域，目标职位优先级：
+
+| 职位 | 优先级 | 说明 |
+|------|--------|------|
+| **Procurement Manager** | ⭐⭐⭐ | 直接负责采购决策 |
+| **Supply Chain Director** | ⭐⭐⭐ | 供应链总负责人 |
+| **Purchasing Manager** | ⭐⭐⭐ | 采购经理 |
+| **Operations Manager** | ⭐⭐ | 运营负责人，常参与采购 |
+| **CEO / Founder** | ⭐⭐ | 中小企业直接决策 |
+| **Product Manager** | ⭐ | 有时参与供应商评估 |
+
+## 4.4 连接请求模板（带 InMail 模板）
+
+连接请求（300 字上限）：
+
+> Hi {contact_name},
+>
+> I came across {company_name} in the {industry} sector. We're GlbBus, a B2B platform specializing in aluminum profiles, fasteners, CNC parts, and electrical components for industrial buyers.
+>
+> Would be great to connect and explore how we might support your supply chain.
+
+连接通过后 → 发消息（可使用 InMail 模板）：
+
+> Hi {contact_name},
+>
+> Thanks for connecting! Just wanted to briefly introduce GlbBus (www.koudingcloud.com) — we're an AI-driven B2B platform working with verified Chinese manufacturers:
+>
+> • Aluminum profiles & extrusions
+> • Fasteners, bolts, and hardware
+> • Electrical components
+> • Custom CNC / machined parts
+>
+> If you're sourcing any of these, happy to share our catalog and pricing.
+>
+> Best,
+> Yin
+> WhatsApp: +86 136 5194 5808
+
+## 4.5 LinkedIn 每日操作量建议
+
+| 操作 | 每日建议 | 说明 |
+|------|----------|------|
+| 搜索公司 | 5-10 家 | 不需要账号限制 |
+| 发送连接请求 | 10-20 | LinkedIn 有 weekly limit (~100) |
+| InMail | 5-10 | 付费才有次数 |
+| 回复消息 | 按需 | 优先回复已连接的人 |
+
+## 4.6 LinkedIn 避坑
+
+- **不要批量添加好友**：LinkedIn 会封号
+- **每天加人不超过 20**：安全线
+- **连接请求一定要写备注**：通过率从 20% → 60%+
+- **不要发链接**：第一封消息不要带网站链接，先建立信任
+- **资料完善你的 Profile**：加完好友对方会看你的 Profile
+
+---
+
+# 第五部分：开发信策略与模板
+
+## 5.1 开发信工作流
+
+在 GlbBus 后台直接操作：
+
+```
+① 筛选线索（按状态、国家、行业）
+   ↓
+② 点击 ✉️ 按钮 → 弹出开发信模板
+   ↓
+③ 选择语言（EN / ZH / RU / ES）
+   ↓
+④ 📋 复制到剪贴板 → 粘贴进邮箱发送
+   或 🚀 在邮箱中打开 → 自动填好主题和正文
+   ↓
+⑤ email_count 自动 +1，记录发送时间
+```
+
+## 5.2 四种语言模板
+
+后台内置 4 种语言模板。点击 ✉️ 后在弹窗右上角切换：
+
+| 语言 | 适用市场 | 说明 |
+|------|----------|------|
+| **EN** | 全球（通用） | 英语开发信 |
+| **ZH** | 偶尔使用 | 中文开发信 |
+| **RU** | 东欧（德悟市场） | 俄语开发信 |
+| **ES** | 拉美（德悟市场） | 西班牙语开发信 |
+
+每个模板会自动填充：
+- 联系人姓名（`{contact_name}`）
+- 公司名（`{company_name}`）
+- 行业（`{industry}`）
+
+## 5.3 开发信策略
+
+### 第一批（陌生开发）
+> 直接但不生硬，突出价值而非推销
+
+核心要素：
+- 提到对方公司名（说明你做了功课）
+- 一句话介绍 GlbBus
+- 列出你供应什么产品
+- Call to action（约电话 / 索取报价需求）
+
+### 第二批（跟进 — 3天后）
+> 如果你还没回复，我再提一句附加价值
+
+策略：加一张产品图 / 推荐某个产品 / 分享一个行业趋势
+
+### 第三批（再跟进 — 1周后）
+> 最后一次试探，礼貌收尾
+
+如果三批都无回应 → 状态改为 `closed_lost`，标记 `never-responded`
+
+## 5.4 每日发送量建议
+
+| 阶段 | 每日发送 | 说明 |
+|------|----------|------|
+| 预热期（第1周） | 5-10 封/天 | 新域名 IP 预热 |
+| 增长期（第2周） | 20-30 封/天 | 逐步增加 |
+| 稳定期（第3周起） | 50 封/天 | 正常发送 |
+
+> **重要：** 腾讯企业邮免费版单日有 500 封上限，初期完全够用。
+
+---
+
+# 第六部分：询盘跟进 SOP
+
+## 6.1 查看询盘
+
+**管理后台 → 📩 询盘管理**
+
+1. 选择筛选条件（new / contacted / closed / all）
+2. 点击 **🔍 查询**
+3. 查看询盘详情：买家姓名、邮箱、国家、产品、需求描述
+
+## 6.2 询盘跟进策略
+
+| 时间 | 操作 |
+|------|------|
+| 收到询盘 **24小时内** | 回复报价 + 礼貌问候 |
+| 3天未回复 | 跟进邮件 "Just checking if you received our quote" |
+| 1周未回复 | 再次跟进，提供附加信息（如新品、案例） |
+| 2周未回复 | 标记为 cold，不再主动跟进 |
+
+## 6.3 询盘回复模板（英文）
+
+> **Subject:** Re: Quotation from GlbBus — {Product Name}
+>
+> Hi {buyer_name},
+>
+> Thank you for your inquiry about {product_name} on GlbBus.
+>
+> Below is our quotation:
+>
+> — Product: {product_name}
+> — Unit Price: ${price} (FOB {fob_port})
+> — MOQ: {moq} pcs
+> — Lead Time: {lead_time} days
+> — Certifications: {certifications}
+>
+> If you need any further specifications or samples, please let me know.
+>
+> Looking forward to your feedback.
+>
+> Best regards,
+> Yin
+> GlbBus | sales@koudingcloud.com
+> WhatsApp: +86 136 5194 5808
+
+---
+
+# 第七部分：产品管理与上架
+
+## 7.1 SKU 编码规范
 
 ```
 {供应商前缀}-{类别缩写}-{序号3位}
 
 德悟（DW）：
-  DW-EXT-001   铝型材 (Extrusion)
-  DW-CNC-001   CNC 加工件
-  DW-FAST-001  紧固件 (Fastener)
-  DW-PIPE-001  管件
-  DW-ELEC-001  电气 (Electrical)
-  DW-VALVE-001 阀门
-  DW-SPRING-001弹簧
+  DW-EXT-001        铝型材 (Extrusion)
+  DW-CNC-001        CNC 加工件
+  DW-FAST-001       紧固件 (Fastener)
+  DW-ELEC-001       电气 (Electrical)
 
 瓦鲁（WR）：
-  WR-FLG-001   法兰 (Flange)
-  WR-FITTING-001 管件
-  WR-CONV-001  输送带 (Conveyor)
-  WR-MOTOR-001 电机
-  WR-SENSOR-001 传感器
-  WR-PNEU-001  气动 (Pneumatic)
-  WR-SEAL-001  密封件 (Seal)
-  WR-HYD-001   液压 (Hydraulic)
-  WR-ELEC-001  电气
+  WR-FLG-001        法兰 (Flange)
+  WR-FITTING-001    管件
+  WR-CONV-001       输送带 (Conveyor)
+  WR-MOTOR-001      电机
+  WR-SENSOR-001     传感器
+  WR-PNEU-001       气动 (Pneumatic)
+  WR-SEAL-001       密封件 (Seal)
+  WR-HYD-001        液压 (Hydraulic)
+  WR-ELEC-001       电气
 ```
 
-### 4.4 修改产品信息
+## 7.2 添加新产品（批量录入）
 
-通过 Supabase Dashboard → **Table Editor** → **products** → 直接编辑单元格。
-
-**注意：** 如果修改多语言描述，请确保所有 5 种语言都填写完整。如果修改 `description` 字段，以 JSON 格式编辑。
-
----
-
-## 5. 多语言翻译管理
-
-### 5.1 系统支持的语言
-
-| 代码 | 语言 | 方向 | 目标市场 |
-|------|------|------|----------|
-| `en` | English | LTR | 全球通用 |
-| `zh` | 简体中文 | LTR | 中国供应商 |
-| `ru` | Русский | LTR | 东欧市场（德悟） |
-| `es` | Español | LTR | 拉美市场（德悟） |
-| `ar` | العربية | RTL | 中东市场（瓦鲁） |
-
-### 5.2 编辑翻译字典
-
-翻译字典在 `src/i18n/dictionaries/{lang}.json`，支持嵌套 key 和参数插值。
-
-**示例（编辑英文）：**
+管理后台 → 📦 批量录入
 
 ```json
-{
-  "navigation": {
-    "products": "Products",
-    "suppliers": "Suppliers"
-  },
-  "home": {
-    "hero_title": "Industrial Products, Sourced Globally",
-    "hero_subtitle": "Connect with verified manufacturers..."
-  },
-  "products": {
-    "count_label": "{count} products available"
+[
+  {
+    "sku": "DW-FAST-M8-021",
+    "supplier_slug": "dewu-industrial",
+    "name_en": "M8 Stainless Steel Hex Bolt",
+    "name_zh": "M8不锈钢六角螺栓",
+    "category": "Fasteners & Hardware",
+    "specifications": {"material": "SS304", "size": "M8", "length": "30mm"},
+    "base_price": 0.15,
+    "certifications": ["ISO 9001"],
+    "moq": 5000,
+    "lead_time_days": 7,
+    "fob_port": "Ningbo"
   }
-}
+]
 ```
 
-**参数插值语法：** `{参数名}`，例如 `"count_label": "{count} products"`，代码中传入 `{ count: 40 }`。
+## 7.3 已有产品查询
 
-**完整翻译键层级：**
+管理后台 → 📋 产品列表 → 筛选供应商 → **📋 查询**
+
+## 7.4 供应商管理
+
+管理后台 → 🏭 供应商
+
+- 查看所有供应商
+- 新增供应商（需在 Supabase Table Editor 中输入详细信息）
+
+---
+
+# 第八部分：多语言运营
+
+## 8.1 系统支持 5 种语言
+
+| 代码 | 语言 | RTL | 适用市场 |
+|------|------|-----|----------|
+| `en` | English | 否 | 全球 |
+| `zh` | 简体中文 | 否 | 中国 |
+| `ru` | Русский | 否 | 东欧 |
+| `es` | Español | 否 | 拉美 |
+| `ar` | العربية | 是 | 中东 |
+
+## 8.2 翻译字典编辑
+
+翻译文件：`src/i18n/dictionaries/{lang}.json`
+
+修改后重新部署即可生效。主要翻译键：
 
 ```
-common.site_name       — 站点名
-common.site_tagline    — 站点标语
-common.search_placeholder — 搜索框占位文字
-common.trusted_suppliers — 认证供应商标签
-navigation.products    — 导航"产品"
-navigation.suppliers   — 导航"供应商"
-navigation.about       — 导航"关于"
-navigation.contact     — 导航"联系我们"
-home.hero_title        — 首页大标题
-home.hero_subtitle     — 首页副标题
-home.featured_title    — 推荐产品标题
-products.page_title    — 产品列表页标题
-products.count_label   — 产品数量文字
-products.sku_label     — SKU 标签
-products.certifications — 认证标签
-inquiry.title          — 询盘表单标题
-inquiry.*_placeholder  — 表单占位文字
-inquiry.success_message — 提交成功提示
-suppliers.page_title   — 供应商页标题
-about.page_title       — 关于页标题
-contact.page_title     — 联系页标题
+common.site_name
+navigation.products / suppliers / about / contact
+home.hero_title / hero_subtitle
+products.page_title / count_label / sku_label
+inquiry.title / success_message
+suppliers.page_title
+about.page_title
+contact.page_title
 ```
 
-### 5.3 添加新产品描述
+## 8.3 产品描述多语言管理
 
-每个产品的多语言描述存储在 `products.description` JSONB 字段中：
+每个产品的描述存储在 `products.description` JSONB 字段，标准格式：
 
 ```json
 {
-  "en": "English description...",
-  "zh": "中文描述...",
-  "ru": "Описание на русском...",
-  "es": "Descripción en español...",
-  "ar": "الوصف بالعربية..."
+  "en": "...",
+  "zh": "...",
+  "ru": "...",
+  "es": "...",
+  "ar": "..."
 }
 ```
 
-### 5.4 语言路由行为
-
-| 访问路径 | 行为 |
-|----------|------|
-| `https://glbbus.com/en/...` | 直接显示英文版 |
-| `https://glbbus.com/zh/...` | 直接显示中文版 |
-| `https://glbbus.com/` | 检测浏览器语言 → 重定向到对应版本 |
-| `https://glbbus.com/?q=search` | 重定向后保留 query string |
-
 ---
 
-## 6. 供应商管理
+# 第九部分：技术运维
 
-### 6.1 当前供应商
+## 9.1 快速启动
 
-| 供应商 | ID | 产品数 | 目标市场 |
-|--------|-----|--------|----------|
-| 德悟 Dewu Industrial | `7ecefeb5-...` | 20 | 东欧 · 北美 · 拉美 |
-| 瓦鲁 Waru Manufacturing | `49f4c400-...` | 20 | 东南亚 · 中东 |
-
-### 6.2 添加新供应商
-
-1. 进入 Supabase Dashboard → **Table Editor** → **suppliers**
-2. 点击 **Insert row**
-3. 填写字段：
-   - `name` — 公司名称
-   - `slug` — URL 友好名称（如 `new-supplier`）
-   - `country` — 国家
-   - `contact_email` — 联系邮箱
-   - `certifications` — JSON 数组
-   - `production_capacity` — 产能描述
-   - `api_webhook_url` — 可选，后续自动化对接用
-4. 在产品管理中添加该供应商的产品
-
-### 6.3 供应商 API Webhook（高级功能）
-
-系统支持供应商通过 Webhook 接收询盘通知。联系开发人员配置 `suppliers.api_webhook_url` 字段。
-
----
-
-## 7. 询盘管理
-
-### 7.1 询盘流程
-
-```
-买家填写表单
-    ↓
-POST /api/inquiries
-    ↓
-存入 Supabase inquiries 表 (status: "new")
-    ↓ (手动)
-登录 Supabase Dashboard 查看新询盘
-    ↓
-联系买家 → 转为 "contacted"
-    ↓
-报价 → 转为 "quoted"
-    ↓
-完成 → 转为 "closed"
+```bash
+cd 01-Dev/06-GlbBus
+npm install
+npm run dev
 ```
 
-### 7.2 查看询盘
+## 9.2 环境变量
 
-1. 登录 [Supabase Dashboard](https://supabase.com)
-2. 选择项目 → **Table Editor** → **inquiries**
-3. 按 `created_at desc` 排序，最上面是最新询盘
-
-### 7.3 询盘表结构
-
-| 字段 | 类型 | 说明 |
+| 变量 | 必填 | 来源 |
 |------|------|------|
-| `id` | UUID | 主键 |
-| `product_id` | UUID | 关联产品 |
-| `buyer_name` | TEXT | 买家姓名 |
-| `buyer_email` | TEXT | 买家邮箱 |
-| `buyer_phone` | TEXT | 电话（选填） |
-| `buyer_country` | TEXT | 国家 |
-| `company_name` | TEXT | 公司名（选填） |
-| `quantity` | INTEGER | 询价数量 |
-| `message` | TEXT | 需求描述 |
-| `ai_quality_score` | INTEGER | AI 质量评分（0-100，预留） |
-| `status` | TEXT | 状态：new/contacted/quoted/closed |
-| `created_at` | TIMESTAMPTZ | 提交时间 |
+| `NEXT_PUBLIC_SUPABASE_URL` | ✅ | Supabase Project → Settings → API |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | 同上 |
+| `SUPABASE_SERVICE_ROLE_KEY` | ✅ | 同上（管理后台用） |
+| `OPENAI_API_KEY` | ❌ | [platform.openai.com](https://platform.openai.com) |
 
-### 7.4 询盘字段说明（中文对照）
+## 9.3 数据库（Supabase）
 
-| 表字段 | 表单字段 | 说明 |
-|--------|----------|------|
-| `buyer_name` | Your Name / 您的姓名 | 必填 |
-| `buyer_email` | Email / 邮箱 | 必填 |
-| `buyer_country` | Country / 国家 | 必填 |
-| `quantity` | Quantity / 数量 | 选填 |
-| `message` | 需求描述 | 必填 |
+**项目 ID：** `qktaaivkcrxriaoaqsnz`
 
----
+**主要表：**
+- `products` — 产品数据
+- `suppliers` — 供应商数据
+- `inquiries` — 买家询盘
+- `leads` — 目标客户线索（客户开发核心表）
 
-## 8. AI 内容生成
-
-### 8.1 API 调用
-
-**请求：**
+## 9.4 Vercel 部署
 
 ```bash
-curl -X POST https://your-domain.com/api/generate-description \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name_en": "6063-T5 Aluminum Extrusion Profile",
-    "name_zh": "6063-T5 铝合金型材",
-    "category": "Aluminum Profiles",
-    "material": "Aluminum 6063-T5",
-    "specifications": {
-      "length": "Custom (max 6m)",
-      "tolerance": "±0.1mm",
-      "surface_finish": "Anodized / Powder Coated"
-    },
-    "certifications": ["CE", "RoHS"]
-  }'
+git push origin main
+# Vercel 自动部署
 ```
 
-**响应：**
-
-```json
-{
-  "success": true,
-  "description": {
-    "en": "Professional B2B English description...",
-    "zh": "专业B2B中文描述...",
-    "ru": "B2B описание на русском...",
-    "es": "Descripción B2B en español...",
-    "ar": "وصف B2B بالعربية..."
-  }
-}
-```
-
-### 8.2 批量生成描述
+## 9.5 执行脚本
 
 ```bash
-# 当前状态：OpenAI API 网络不通，用模板规则
-npx tsx scripts/generate-descriptions-rule.ts
-
-# 网络通后，切换到 AI 生成（会覆盖模板描述）
-npx tsx scripts/generate-descriptions.ts
-```
-
-**注意：** `generate-descriptions.ts` 需要在 `.env.local` 中设置 `OPENAI_API_KEY`。一次调用约 5-10 秒，40 个产品约 5-7 分钟。
-
----
-
-## 9. 数据录入脚本
-
-### 9.1 产品批量录入
-
-```bash
+# 产品批量录入
 npx tsx scripts/seed-products.ts
+
+# 模板规则生成描述（离线可用）
+npx tsx scripts/generate-descriptions-rule.ts
+
+# AI 描述生成（需 OpenAI API key）
+npx tsx scripts/generate-descriptions.ts
+
+# 检查 leads 表
+npx tsx scripts/check-table.ts
 ```
 
-**用途：** 一次性批量添加新产品。编辑 `scripts/seed-products.ts` 中的 `DEWU_PRODUCTS` 或 `WARU_PRODUCTS` 数组，然后运行脚本。
+---
 
-**产品条目格式：**
+# 附录：快捷查询
 
-```typescript
-{
-  sku: "DW-EXT-TSLOT-006",         // 唯一 SKU
-  name_en: "T-Slot Aluminum Profile",
-  name_zh: "T型槽铝合金型材",
-  category: "Aluminum Profiles",    // 分类
-  material: "Aluminum 6063-T5",    // 材料
-  specs: {
-    profile: "40mm x 40mm",
-    slot_width: "8mm",
-    length: "Custom (max 6m)",
-    finish: "Clear Anodized"
-  },
-  price: 5.8,                       // 单价（USD）
-  cert: ["CE", "RoHS"],             // 认证
-  moq: 200,                         // 最小起订量
-  lead_time: 10,                    // 交期（天）
-  fob: "Ningbo"                     // FOB 港口
-}
+## 地址
+
+| 页面 | 地址 |
+|------|------|
+| 前台首页 | `https://glbbus.vercel.app/{lang}` |
+| 管理后台 | `https://glbbus.vercel.app/admin/dashboard` |
+| 本地开发 | `http://localhost:3000/admin/dashboard` |
+
+## 管理后台密码
+
+```
+glbbus2026
 ```
 
-### 9.2 描述生成（模板）
+## 联系方式
+
+```
+企业名：GlbBus
+网站：www.koudingcloud.com
+销售邮箱：sales@koudingcloud.com
+WhatsApp：+86 136 5194 5808
+联系人：Yin（尹）
+```
+
+## 快捷命令
 
 ```bash
-npx tsx scripts/generate-descriptions-rule.ts
-```
+# 本地启动
+cd 01-Dev/06-GlbBus && npm run dev
 
-为所有 `description.en` 为空的产品，用模板规则生成 5 语言描述。
+# 构建
+npm run build
 
----
+# 类型检查
+npx tsc --noEmit
 
-## 10. API 接口文档
-
-### 10.1 询盘提交
-
-```
-POST /api/inquiries
-
-Request Body:
-{
-  "product_id": "UUID",
-  "buyer_name": "string",
-  "buyer_email": "string",
-  "buyer_phone": "string (optional)",
-  "buyer_country": "string",
-  "quantity": "number (optional)",
-  "message": "string"
-}
-
-Response 200:
-{
-  "success": true,
-  "inquiry": { ... }
-}
-
-Response 400/500:
-{
-  "error": "error message"
-}
-```
-
-### 10.2 AI 描述生成
-
-```
-POST /api/generate-description
-
-Request Body:
-{
-  "name_en": "string (required)",
-  "name_zh": "string (optional)",
-  "category": "string (required)",
-  "material": "string (required)",
-  "specifications": { key: value } (required),
-  "certifications": ["string"] (optional)
-}
-
-Response 200:
-{
-  "success": true,
-  "description": {
-    "en": "...",
-    "zh": "...",
-    "ru": "...",
-    "es": "...",
-    "ar": "..."
-  }
-}
+# 代码提交 + 自动部署
+git add -A && git commit -m "update" && git push origin main
 ```
 
 ---
 
-
-### 11.1 发送方式选择
-
-| 方式 | 适用场景 | 成本 |
-|------|----------|------|
-| 腾讯企业邮（免费版） | 日常一对一沟通，50人内免费 | 免费 |
-| Brevo (Sendinblue) | 批量开发信、Newsletter、自动化 | 免费300封/天 |
-
-### 11.2 腾讯企业邮配置步骤
-
-1. 注册 [腾讯企业邮免费版](https://exmail.qq.com/)
-2. 验证域名 `koudingcloud.com` 所有权
-3. 登录 DNSPod → 添加以下 MX 记录：
-
-```
-主机记录 @ → 邮件服务器 mxexmail.com → 优先级 5
-主机记录 @ → 邮件服务器 mxexmail.com → 优先级 10 (备用)
-```
-
-4. 添加 SPF 记录（避免被标记为垃圾邮件）：
-
-```
-主机记录 @ → TXT 类型 → 值：v=spf1 include:spf.exmail.qq.com ~all
-```
-
-5. 等待 DNS 生效（约10分钟-2小时）
-6. 创建邮箱账户 `sales@koudingcloud.com`
-7. 登录 webmail 验证收发正常
-
-### 11.3 开发信避坑指南
-
-- **新域名先预热**：刚注册域名的 IP 信誉低，先从每天5-10封开始
-- **个性化第一封**：不要群发语气，提及对方公司/产品
-- **避免链接过多**：第一封邮件含多个链接容易触发垃圾邮件过滤
-- **SPF/DKIM 必须配**：不配直接进垃圾箱
-- **每日上限**：初次建议 20-30 封，后续逐步增加
-- **退订/停止标记**：对方回复"退订"应立即停止联系
-
----
-
-> 版本: 2026-07-12 · 如有疑问联系开发团队
+> 版本：2026-07-13 · 如有疑问联系运营负责人 Yin
+> 下次更新：每周五复盘后更新
