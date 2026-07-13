@@ -18,8 +18,9 @@
 - [第五部分：开发信策略与模板](#第五部分开发信策略与模板)
 - [第六部分：询盘跟进 SOP](#第六部分询盘跟进-sop)
 - [第七部分：产品管理与上架](#第七部分产品管理与上架)
-- [第八部分：多语言运营](#第八部分多语言运营)
-- [第九部分：技术运维](#第九部分技术运维)
+- [第八部分：网络与加速](#第八部分网络与加速)
+- [第九部分：多语言运营](#第九部分多语言运营)
+- [第十部分：技术运维](#第十部分技术运维)
 - [附录：快捷查询](#附录快捷查询)
 
 ---
@@ -436,7 +437,136 @@
 
 ---
 
-# 第八部分：多语言运营
+# 第八部分：网络与加速
+
+> 跨境电商运营需要稳定访问海外网站（LinkedIn、Google、OpenAI、WhatsApp、海外买家官网等）。
+> 同时，境外买家访问 GlbBus 网站也需要域名和 CDN 覆盖良好。
+
+## 8.1 为什么需要网络加速
+
+| 场景 | 无加速 | 有加速 |
+|------|--------|--------|
+| 访问 LinkedIn | 超时／加载慢 | 秒开 |
+| 访问 OpenAI API | 连接错误 | 稳定调用 |
+| 打开 Google 搜买家 | 异常 | 正常 |
+| WhatsApp Web | 收不到消息 | 实时推送 |
+| YouTube / 买家官网 | 打不开或极慢 | 流畅 |
+
+AI 生成目标客户和开发信功能都需要访问 OpenAI API，**网络不通则这些功能无法正常使用**。
+
+## 8.2 推荐方案
+
+### 方案 A：Clash Meta / Mihomo（推荐，桌面端）
+
+- **安装：**
+
+```bash
+# Homebrew 安装 Clash Meta（改名为 mihomo）
+brew install mihomo
+
+# 或下载 GUI 版本
+# 推荐：Clash Verge Rev（开源 GUI，支持多平台）
+# https://github.com/clash-verge-rev/clash-verge-rev/releases
+```
+
+- **配置：**
+  1. 准备一个代理订阅链接（购买机场服务后获取）
+  2. 打开 Clash Verge Rev → **订阅** → 粘贴链接 → 导入
+  3. 开启 **TUN 模式**（全局代理，所有流量走代理）
+  4. 开启**系统代理** → 浏览器可正常访问海外网站
+  5. 节点选择：优先选延迟最低的节点
+
+- **验证：**
+  - 打开 [ip.sb](https://ip.sb) 确认 IP 为海外地址
+  - 访问 [linkedin.com](https://linkedin.com) 正常加载
+
+### 方案 B：Stash（macOS / iOS，付费）
+
+- [https://stash.wiki](https://stash.wiki) — 付费应用，UI 简洁稳定
+- 导入订阅链接，开启代理即可
+
+### 方案 C：Surge（macOS / iOS，付费）
+
+- [https://nssurge.com](https://nssurge.com) — 老牌工具，功能最全
+- 适合高级用户，支持规则自定义、抓包、网络调试
+
+## 8.3 开发环境代理配置
+
+如果只在开发时需要访问海外资源（如 OpenAI API），可以在终端中设置临时代理：
+
+```bash
+# 假设 Clash 运行在本机，端口 7890
+export HTTP_PROXY=http://127.0.0.1:7890
+export HTTPS_PROXY=http://127.0.0.1:7890
+
+# 验证
+export | grep -i proxy
+
+# 测试 curl 是否走代理
+curl -I https://www.google.com
+
+# 运行项目（会继承代理环境变量）
+npm run dev
+```
+
+**永久配置（加到 ~/.zshrc）：**
+
+```bash
+echo '
+export HTTP_PROXY=http://127.0.0.1:7890
+export HTTPS_PROXY=http://127.0.0.1:7890
+' >> ~/.zshrc
+source ~/.zshrc
+```
+
+**关闭代理：**
+
+```bash
+unset HTTP_PROXY HTTPS_PROXY
+```
+
+> **注意：** Vercel 部署后运行的 API 调用不受本地代理影响。
+> 如果需要在 Vercel 上使用 OpenAI，需要在 Vercel Dashboard 为环境变量 `OPENAI_API_KEY` 配置 Vercel Edge 可访问的 Key。
+
+## 8.4 域名与 CDN
+
+GlbBus 部署在 Vercel，自动享受 Vercel Edge Network CDN：
+
+| 地区 | CDN 覆盖 | 预计加载速度 |
+|------|----------|-------------|
+| 北美 | ✅ Vercel Edge | < 200ms |
+| 欧洲 | ✅ Vercel Edge | < 300ms |
+| 东南亚 | ✅ Vercel Edge 节点 | < 500ms |
+| 中东 | ✅ Vercel Edge 节点 | < 600ms |
+| 拉美 | ⚠️ 节点较少 | < 1s |
+| 中国内地 | ❌ 不覆盖（需国内备案） | — |
+
+**域名管理：** 在 Vercel Dashboard → 项目 → Settings → Domains 中配置。
+
+当前绑定域名：`koudingcloud.com`
+
+## 8.5 常见网络问题排查
+
+| 问题 | 原因 | 解决 |
+|------|------|------|
+| OpenAI API 报错 `Connection Error` | 代理未启 / 节点失效 | 检查代理状态，切换节点 |
+| LinkedIn 打不开 | 代理规则未匹配 | 开启 TUN 模式或全局代理 |
+| 后台 AI 生成按钮点了没反应 | 前端请求到 API 超时 | F12 看 Network 是否 500；检查 `OPENAI_API_KEY` |
+| Vercel 部署的站 OpenAI 调用失败 | Vercel 环境无 Key | 去 Vercel Dashboard 添加 `OPENAI_API_KEY` |
+| WhatsApp 消息延迟 | 代理影响 WebSocket | 对 whatsapp.com 设直连规则 |
+
+## 8.6 云端 API Key（Vercel）
+
+如果本地代理正常，但部署到 Vercel 后 OpenAI 调用失败，原因是 Vercel 环境没配 Key：
+
+1. 登录 [vercel.com](https://vercel.com) → 项目 → Settings
+2. 左侧 **Environment Variables**
+3. 添加 `OPENAI_API_KEY` → 填入 Key → 保存
+4. 重新部署
+
+---
+
+# 第九部分：多语言运营
 
 ## 8.1 系统支持 5 种语言
 
@@ -481,7 +611,7 @@ contact.page_title
 
 ---
 
-# 第九部分：技术运维
+# 第十部分：技术运维
 
 ## 9.1 快速启动
 
