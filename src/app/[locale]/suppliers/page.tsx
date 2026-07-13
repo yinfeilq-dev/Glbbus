@@ -10,6 +10,35 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Supplier } from "@/lib/types";
+import { readFileSync } from "fs";
+
+// 德悟供应商介绍（从说明文件读取，编译时嵌入）
+const DEWU_PRODUCT_LINES = `
+### 业务线一：传统工业品制造
+- **铝合金型材**：6063-T5 / 6060-T6 等工业铝型材，散热器型材，T型槽型材
+- **紧固件**：螺栓、螺母、垫圈、弹簧等碳钢/不锈钢件
+- **电气元器件**：端子排、继电器底座、导轨、线槽等
+- **定制 CNC 加工**：精密轴杆、齿轮、支架、外壳等高精度零件
+
+### 业务线二：微细精密金属3D打印
+苏州德悟增材技术有限公司 — 微细精密金属3D打印设备制造专家，由上海交通大学、西北工业大学等知名高校硕/博毕业生创立。
+
+**核心技术指标：**
+- 成形精度 2-15μm · 表面粗糙度 Ra0.5-1.5μm · 无支撑角度 ≥10°
+- 力学性能较常规提升15-25% · 最薄壁厚28μm · 最小孔径/杆径30μm
+
+**主要设备：** DW-UHP-120M（Ф120×180mm）、DW-UHP-70M（Ф70×100mm）、DW-HP-200M（200×200×200mm）
+
+**目标行业：** 精密医疗器械 · 航空航天 · 微流道散热组件 · 半导体组件
+`;
+
+const WARU_PRODUCT_LINES = `
+- **管件与法兰**：不锈钢/碳钢法兰、弯头、三通、管接头
+- **电机**：工业电机、减速电机、伺服电机
+- **气动元件**：气缸、电磁阀、气动接头
+- **密封件**：O型圈、油封、垫片
+- **液压元件**：液压接头、管件、阀组
+`;
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -74,7 +103,12 @@ export default async function SuppliersPage({ params }: Props) {
             </div>
           )}
 
-          {(suppliers ?? []).map((supplier: Supplier) => (
+          {(suppliers ?? []).map((supplier: Supplier) => {
+            const isDewu = supplier.slug === "dewu-industrial";
+            const isWaru = supplier.slug === "waru-manufacturing";
+            const productLinesHtml = isDewu ? DEWU_PRODUCT_LINES : isWaru ? WARU_PRODUCT_LINES : "";
+
+            return (
             <div
               key={supplier.id}
               className="rounded-xl border border-slate-200 p-6"
@@ -108,6 +142,14 @@ export default async function SuppliersPage({ params }: Props) {
                   ))}
                 </div>
               )}
+
+              {/* 产品线详细介绍 */}
+              {productLinesHtml && (
+                <div className="mb-4 rounded-lg bg-slate-50 p-4 text-xs text-slate-700 leading-relaxed whitespace-pre-line">
+                  {productLinesHtml}
+                </div>
+              )}
+
               <Link
                 href={localizedPath(l, "/products") + `?supplier=${supplier.slug}`}
                 className="text-sm font-medium text-blue-600 hover:text-blue-700"
@@ -115,7 +157,8 @@ export default async function SuppliersPage({ params }: Props) {
                 {t(dict, "navigation.products")} →
               </Link>
             </div>
-          ))}
+            );
+          })}
         </div>
       </main>
       <Footer locale={l} dict={dict} />

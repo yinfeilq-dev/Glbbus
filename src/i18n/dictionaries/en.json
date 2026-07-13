@@ -59,7 +59,13 @@
   },
   "suppliers": {
     "page_title": "Our Suppliers",
-    "description": "Verified manufacturers and industrial partners."
+    "description": "Verified manufacturers and industrial partners.",
+    "dewu_name": "Dewu Industrial",
+    "dewu_desc": "Aluminum Profiles · Fasteners · Electrical Components · CNC Machining · Metal 3D Printing",
+    "dewu_additive": "Dewu Additive (Micro-Precision Metal 3D Printing)",
+    "dewu_additive_desc": "Ultra-high precision SLM metal 3D printers. Precision 2-15μm, surface roughness Ra0.5-1.5μm, unsupported angle ≥10°. Targeting medical devices, aerospace, micro-channel heat exchangers, and semiconductor components.",
+    "waru_name": "Waru Manufacturing",
+    "waru_desc": "Flanges · Pipes · Motors · Pneumatics · Seals · Hydraulics"
   },
   "about": {
     "page_title": "About GlbBus",

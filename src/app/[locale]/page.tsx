@@ -64,7 +64,7 @@ export default async function HomePage({ params }: Props) {
               {t(dict, "common.trusted_suppliers")}
             </span>
             <div className="flex gap-3">
-              <span className="rounded-md bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">
+              <span className="rounded-md bg-indigo-100 px-3 py-1.5 text-xs font-semibold text-indigo-700" title="铝型材·紧固件·电气·CNC·金属3D打印">
                 🔧 Dewu Industrial
               </span>
               <span className="rounded-md bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">
@@ -85,6 +85,8 @@ export default async function HomePage({ params }: Props) {
                 ? "Aluminum Profiles" : "铝型材", count: "42" },
               { icon: "🔩", name: "Fasteners & Hardware", count: "38" },
               { icon: "⚡", name: "Electrical Components", count: "27" },
+              { icon: "⚙️", name: "CNC Machining", count: "19" },
+              { icon: "🖨️", name: "Metal 3D Printing", count: "3" },
               { icon: "⛓️", name: "Industrial Machinery", count: "19" },
             ].map((cat) => (
               <div
@@ -125,10 +127,10 @@ export default async function HomePage({ params }: Props) {
                     cert: ["CE", "RoHS"],
                   },
                   {
-                    name: "Stainless Steel 304 Flange",
-                    supplier: "Waru Manufacturing",
-                    price: 0.89,
-                    cert: ["ISO 9001"],
+                    name: "DW-UHP-120M Metal 3D Printer",
+                    supplier: "Dewu Additive",
+                    price: 0,
+                    cert: ["Precision ≤25μm"],
                   },
                   {
                     name: "CNC Machined Bracket",
@@ -155,9 +157,9 @@ export default async function HomePage({ params }: Props) {
                     </h3>
                     <p className="mt-1 text-xs text-slate-400">{item.supplier}</p>
                     <p className="mt-2 text-base font-bold text-blue-600">
-                      ${item.price.toFixed(2)}
+                      {item.price > 0 ? `$${item.price.toFixed(2)}` : "Contact for Pricing"}
                       <span className="text-xs font-normal text-slate-400">
-                        {item.price < 50 ? "/pc" : "/m"}
+                        {item.price > 0 && (item.price < 50 ? "/pc" : "/m")}
                       </span>
                     </p>
                     <div className="mt-2 flex flex-wrap gap-1">

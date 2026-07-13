@@ -59,7 +59,13 @@
   },
   "suppliers": {
     "page_title": "我们的供应商",
-    "description": "认证的制造商与工业合作伙伴。"
+    "description": "认证的制造商与工业合作伙伴。",
+    "dewu_name": "德悟工业",
+    "dewu_desc": "铝型材 · 紧固件 · 电气元器件 · CNC加工 · 金属3D打印",
+    "dewu_additive": "德悟增材（微细精密金属3D打印）",
+    "dewu_additive_desc": "超高精度SLM金属3D打印设备，精度2-15μm，表面粗糙度Ra0.5-1.5μm，无支撑角度≥10°。面向精密医疗器械、航空航天、微流道散热组件、半导体组件领域。",
+    "waru_name": "瓦鲁制造",
+    "waru_desc": "管件法兰 · 电机 · 气动 · 密封件 · 液压元件"
   },
   "about": {
     "page_title": "关于 GlbBus",
