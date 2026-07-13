@@ -35,32 +35,6 @@
     "featured_title": "منتجات مميزة",
     "no_featured": "ستظهر المنتجات المميزة بمجرد إضافتها."
   },
-  "products": {
-    "page_title": "جميع المنتجات",
-    "count_label": "{count} منتج متوفر من موردين معتمدين",
-    "categories": "الفئات",
-    "all_categories": "الكل",
-    "sku_label": "رمز المنتج",
-    "no_products": "لم يتم العثور على منتجات.",
-    "certifications": "الشهادات",
-    "breadcrumb_home": "الرئيسية",
-    "breadcrumb_products": "المنتجات"
-  },
-  "inquiry": {
-    "title": "إرسال استفسار",
-    "name_placeholder": "اسمك",
-    "email_placeholder": "البريد الإلكتروني",
-    "country_placeholder": "الدولة",
-    "quantity_placeholder": "الكمية (اختياري)",
-    "message_placeholder": "أخبرنا بمتطلباتك — المواصفات، الكمية، الجدول الزمني...",
-    "submit_button": "📩 إرسال استفسار",
-    "success_message": "✅ تم إرسال الاستفسار! سنتواصل معك خلال 24 ساعة.",
-    "whatsapp_button": "💬 واتساب"
-  },
-  "suppliers": {
-    "page_title": "الموردون لدينا",
-    "description": "مصنعون معتمدون وشركاء صناعيون."
-  },
   "about": {
     "page_title": "عن GlbBus",
     "description": "GlbBus هو منصة B2B تعمل بالذكاء الاصطناعي تربط المشترين العالميين بالمصنعين الصناعيين المعتمدين.",

@@ -1,17 +1,17 @@
 {
   "common": {
-    "site_name": "GlbBus 全球工业品采购",
-    "site_tagline": "全球工业品AI采购平台",
-    "search_placeholder": "按产品名称、材料、规格搜索...",
+    "site_name": "GlbBus 全球工业服务",
+    "site_tagline": "全球工业服务与网络加速",
+    "search_placeholder": "搜索...",
     "search_button": "搜索",
-    "trusted_suppliers": "认证供应商：",
+    "trusted_suppliers": "合作伙伴：",
     "on_time_delivery": "准时交付",
-    "global_shipping": "全球物流",
+    "global_shipping": "全球连接",
     "ai_match": "AI 匹配",
     "secure_payments": "安全支付",
-    "factory_verified": "工厂认证",
+    "factory_verified": "合作伙伴认证",
     "copyright": "© {year} GlbBus 版权所有",
-    "no_products_yet": "暂无产品，添加后将在此展示。",
+    "no_products_yet": "暂无产品。",
     "loading": "加载中...",
     "submit": "提交",
     "cancel": "取消",
@@ -22,66 +22,23 @@
   },
   "navigation": {
     "home": "首页",
-    "products": "产品中心",
-    "suppliers": "供应商",
     "acceleration": "网络加速",
-    "about": "关于我们",
     "contact": "联系我们"
   },
   "home": {
-    "hero_title": "全球工业品，一站式采购",
-    "hero_subtitle": "连接认证制造商，AI 智能匹配，实时报价，全流程支持。",
-    "categories_title": "产品分类",
-    "featured_title": "推荐产品",
-    "no_featured": "推荐产品添加后将在此展示。"
-  },
-  "products": {
-    "page_title": "全部产品",
-    "count_label": "共 {count} 个产品，来自认证供应商",
-    "categories": "分类筛选",
-    "all_categories": "全部",
-    "sku_label": "货号",
-    "no_products": "未找到匹配产品。",
-    "certifications": "认证资质",
-    "breadcrumb_home": "首页",
-    "breadcrumb_products": "产品中心"
-  },
-  "inquiry": {
-    "title": "提交询盘",
-    "name_placeholder": "您的姓名",
-    "email_placeholder": "邮箱",
-    "country_placeholder": "国家",
-    "quantity_placeholder": "数量（选填）",
-    "message_placeholder": "请描述您的需求——规格、数量、交付时间...",
-    "submit_button": "📩 提交询盘",
-    "success_message": "✅ 询盘已提交！我们将在24小时内与您联系。",
-    "whatsapp_button": "💬 WhatsApp 咨询"
-  },
-  "suppliers": {
-    "page_title": "我们的供应商",
-    "description": "认证的制造商与工业合作伙伴。",
-    "dewu_name": "德悟工业",
-    "dewu_desc": "铝型材 · 紧固件 · 电气元器件 · CNC加工 · 金属3D打印",
-    "dewu_additive": "德悟增材（微细精密金属3D打印）",
-    "dewu_additive_desc": "超高精度SLM金属3D打印设备，精度2-15μm，表面粗糙度Ra0.5-1.5μm，无支撑角度≥10°。面向精密医疗器械、航空航天、微流道散热组件、半导体组件领域。",
-    "waru_name": "瓦鲁制造",
-    "waru_desc": "管件法兰 · 电机 · 气动 · 密封件 · 液压元件"
+    "hero_title": "全球工业服务，互联无界",
+    "hero_subtitle": "GlbBus 连接认证制造商，并通过国家（上海）互联网交换中心提供高品质跨境网络加速服务。",
+    "categories_title": "服务"
   },
   "about": {
-    "page_title": "关于 GlbBus",
-    "description": "GlbBus 是一个 AI 驱动的 B2B 平台，连接全球买家与认证工业品制造商。",
     "mission_title": "我们的使命",
-    "mission_text": "降低全球工业品采购的信息壁垒，通过 AI 技术实现供需精准匹配，让跨境采购像本地采购一样简单高效。",
-    "vision_title": "平台定位",
-    "vision_desc": "GlbBus 定位为 B2B 工业品跨境电商的 AI 平台，覆盖从选品、内容、运营、客服到供应链的全链条。我们与经过严格认证的中国制造商建立联营关系，确保产品质量与交付可靠。",
-    "team_title": "我们的团队",
-    "team_text": "团队由跨境电商、工业制造和 AI 技术领域的资深从业者组成，具备丰富的中美欧、东南亚及中东市场运营经验。",
+    "mission_text": "降低全球工业采购与跨境通信的信息和连接壁垒。",
     "why_title": "为什么选择 GlbBus",
-    "why_1": "直连认证制造商，去掉中间商差价",
-    "why_2": "AI 智能匹配，快速找到最合适的产品",
-    "why_3": "全流程管理：选品 → 报价 → 下单 → 物流 → 售后",
-    "why_4": "多语言支持，覆盖全球主要市场",
-    "why_5": "严格质量控制和准时交付保障"
+    "why_1": "直连认证制造商",
+    "why_2": "AI 智能匹配，快速找到合适产品",
+    "why_3": "全流程管理：选品 → 物流 → 售后",
+    "why_4": "多语言支持，覆盖全球市场",
+    "why_5": "SHIXP 高品质跨境网络保障"
   },
   "contact": {
     "page_title": "联系我们",
@@ -104,8 +61,8 @@
     "cta_text": "如果您有采购需求或想成为我们的供应商合作伙伴，欢迎随时联系我们。"
   },
   "meta": {
-    "home_description": "GlbBus 是AI驱动的B2B工业品跨境采购平台，连接全球买家与中国、俄罗斯等新兴市场的认证制造商。AI选品、多语言支持、一站式采购。",
-    "home_keywords": "B2B, 工业品采购, 跨境贸易, 中国供应商, AI选品, 工业产品, 制造业, 认证制造商"
+    "home_description": "GlbBus — 全球工业服务与跨境网络加速，基于国家（上海）互联网交换中心（SHIXP）。",
+    "home_keywords": "B2B, 工业品, 网络加速, 跨境, SHIXP"
   },
   "acceleration": {
     "page_title": "跨境网络加速",

@@ -35,32 +35,6 @@
     "featured_title": "Рекомендуемые товары",
     "no_featured": "Рекомендуемые товары появятся после добавления."
   },
-  "products": {
-    "page_title": "Все товары",
-    "count_label": "{count} товаров от проверенных поставщиков",
-    "categories": "Категории",
-    "all_categories": "Все",
-    "sku_label": "Артикул",
-    "no_products": "Товары не найдены.",
-    "certifications": "Сертификаты",
-    "breadcrumb_home": "Главная",
-    "breadcrumb_products": "Товары"
-  },
-  "inquiry": {
-    "title": "Отправить запрос",
-    "name_placeholder": "Ваше имя",
-    "email_placeholder": "Email",
-    "country_placeholder": "Страна",
-    "quantity_placeholder": "Количество (необязательно)",
-    "message_placeholder": "Опишите ваши требования — спецификацию, количество, сроки...",
-    "submit_button": "📩 Отправить запрос",
-    "success_message": "✅ Запрос отправлен! Мы свяжемся с вами в течение 24 часов.",
-    "whatsapp_button": "💬 WhatsApp"
-  },
-  "suppliers": {
-    "page_title": "Наши поставщики",
-    "description": "Проверенные производители и промышленные партнеры."
-  },
   "about": {
     "page_title": "О GlbBus",
     "description": "GlbBus — это AI-платформа B2B, соединяющая глобальных покупателей с проверенными промышленными производителями.",

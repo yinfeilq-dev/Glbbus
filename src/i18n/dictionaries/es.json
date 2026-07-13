@@ -35,32 +35,6 @@
     "featured_title": "Productos Destacados",
     "no_featured": "Los productos destacados aparecerán una vez agregados."
   },
-  "products": {
-    "page_title": "Todos los Productos",
-    "count_label": "{count} productos disponibles de proveedores verificados",
-    "categories": "Categorías",
-    "all_categories": "Todos",
-    "sku_label": "SKU",
-    "no_products": "No se encontraron productos.",
-    "certifications": "Certificaciones",
-    "breadcrumb_home": "Inicio",
-    "breadcrumb_products": "Productos"
-  },
-  "inquiry": {
-    "title": "Enviar Consulta",
-    "name_placeholder": "Su Nombre",
-    "email_placeholder": "Correo electrónico",
-    "country_placeholder": "País",
-    "quantity_placeholder": "Cantidad (opcional)",
-    "message_placeholder": "Cuéntenos sus requisitos — especificaciones, cantidad, plazos...",
-    "submit_button": "📩 Enviar Consulta",
-    "success_message": "✅ ¡Consulta enviada! Nos comunicaremos en 24 horas.",
-    "whatsapp_button": "💬 WhatsApp"
-  },
-  "suppliers": {
-    "page_title": "Nuestros Proveedores",
-    "description": "Fabricantes verificados y socios industriales."
-  },
   "about": {
     "page_title": "Acerca de GlbBus",
     "description": "GlbBus es una plataforma B2B impulsada por IA que conecta compradores globales con fabricantes industriales verificados.",

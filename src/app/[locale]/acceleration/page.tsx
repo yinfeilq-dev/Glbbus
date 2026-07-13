@@ -7,7 +7,7 @@ import { type Locale, locales, localizedPath } from "@/i18n/config";
 import { loadDictionary } from "@/i18n/load-dictionary";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
-import InquiryForm from "@/components/product/inquiry-form";
+// Contact / inquiry form handled inline on the contact page
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
@@ -353,7 +353,17 @@ export default async function AccelerationPage({ params }: Props) {
               <h2 className="mb-3 text-2xl font-bold text-white">{acc?.cta_title ?? ""}</h2>
               <p className="mb-8 text-sm text-slate-300">{acc?.cta_desc ?? ""}</p>
               <div className="rounded-xl border border-slate-700 bg-slate-800/50 p-6 text-left">
-                <InquiryForm productId="" locale={l} dict={dict} dark />
+                <div className="rounded-xl border border-slate-600 bg-slate-700 p-6">
+                  <p className="mb-4 text-sm text-slate-300">
+                    {nav?.contact_info ?? "Contact us for a customized acceleration solution."}
+                  </p>
+                  <Link
+                    href={localizedPath(l, "/contact")}
+                    className="inline-block rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition"
+                  >
+                    {nav?.contact ?? "Contact Us"}
+                  </Link>
+                </div>
               </div>
             </div>
           </section>

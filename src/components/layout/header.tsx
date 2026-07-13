@@ -45,28 +45,10 @@ export default function Header({ locale, dict }: Props) {
         </Link>
         <nav className="hidden items-center gap-6 text-sm text-slate-500 md:flex">
           <Link
-            href={localizedPath(locale, "/products")}
+            href={localizedPath(locale, "/acceleration")}
             className="font-medium text-slate-900 hover:text-blue-600"
           >
-            {nav.products ?? "Products"}
-          </Link>
-          <Link
-            href={localizedPath(locale, "/suppliers")}
-            className="hover:text-blue-600"
-          >
-            {nav.suppliers ?? "Suppliers"}
-          </Link>
-          <Link
-            href={localizedPath(locale, "/acceleration")}
-            className="hover:text-blue-600"
-          >
             {nav.acceleration ?? "Acceleration"}
-          </Link>
-          <Link
-            href={localizedPath(locale, "/about")}
-            className="hover:text-blue-600"
-          >
-            {nav.about ?? "About"}
           </Link>
           <Link
             href={localizedPath(locale, "/contact")}

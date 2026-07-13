@@ -1,17 +1,17 @@
 {
   "common": {
     "site_name": "GlbBus",
-    "site_tagline": "Global Industrial Products Sourcing",
-    "search_placeholder": "Search by product name, material, spec...",
+    "site_tagline": "Global Industrial Services & Network Acceleration",
+    "search_placeholder": "Search...",
     "search_button": "Search",
-    "trusted_suppliers": "Trusted Suppliers:",
+    "trusted_suppliers": "Trusted Partners:",
     "on_time_delivery": "On-time Delivery",
-    "global_shipping": "Global Shipping",
+    "global_shipping": "Global Connectivity",
     "ai_match": "AI Match",
     "secure_payments": "Secure Payments",
-    "factory_verified": "Factory Verified",
+    "factory_verified": "Verified Partners",
     "copyright": "© {year} GlbBus. All rights reserved.",
-    "no_products_yet": "No products yet. Products will appear here once added.",
+    "no_products_yet": "No products yet.",
     "loading": "Loading...",
     "submit": "Submit",
     "cancel": "Cancel",
@@ -21,67 +21,24 @@
     "cta_acceleration_button": "Learn More 🚀"
   },
   "navigation": {
-    "products": "Products",
-    "suppliers": "Suppliers",
+    "home": "Home",
     "acceleration": "Acceleration",
-    "about": "About",
-    "contact": "Contact",
-    "home": "Home"
+    "contact": "Contact"
   },
   "home": {
-    "hero_title": "Industrial Products, Sourced Globally",
-    "hero_subtitle": "Connect with verified manufacturers for your B2B industrial needs. AI-powered matching, real-time quotes, end-to-end support.",
-    "categories_title": "Product Categories",
-    "featured_title": "Featured Products",
-    "no_featured": "Featured products will appear here once added."
-  },
-  "products": {
-    "page_title": "All Products",
-    "count_label": "{count} products available from verified suppliers",
-    "categories": "Categories",
-    "all_categories": "All",
-    "sku_label": "SKU",
-    "no_products": "No products found.",
-    "certifications": "Certifications",
-    "breadcrumb_home": "Home",
-    "breadcrumb_products": "Products"
-  },
-  "inquiry": {
-    "title": "Send Inquiry",
-    "name_placeholder": "Your Name",
-    "email_placeholder": "Email",
-    "country_placeholder": "Country",
-    "quantity_placeholder": "Quantity (optional)",
-    "message_placeholder": "Tell us your requirements — spec, quantity, delivery timeline...",
-    "submit_button": "📩 Send Inquiry",
-    "success_message": "✅ Inquiry sent! We will get back to you within 24 hours.",
-    "whatsapp_button": "💬 WhatsApp"
-  },
-  "suppliers": {
-    "page_title": "Our Suppliers",
-    "description": "Verified manufacturers and industrial partners.",
-    "dewu_name": "Dewu Industrial",
-    "dewu_desc": "Aluminum Profiles · Fasteners · Electrical Components · CNC Machining · Metal 3D Printing",
-    "dewu_additive": "Dewu Additive (Micro-Precision Metal 3D Printing)",
-    "dewu_additive_desc": "Ultra-high precision SLM metal 3D printers. Precision 2-15μm, surface roughness Ra0.5-1.5μm, unsupported angle ≥10°. Targeting medical devices, aerospace, micro-channel heat exchangers, and semiconductor components.",
-    "waru_name": "Waru Manufacturing",
-    "waru_desc": "Flanges · Pipes · Motors · Pneumatics · Seals · Hydraulics"
+    "hero_title": "Industrial Services, Globally Connected",
+    "hero_subtitle": "GlbBus connects you to verified industrial manufacturers and provides high-quality cross-border network acceleration through the Shanghai Internet Exchange (SHIXP).",
+    "categories_title": "Services"
   },
   "about": {
-    "page_title": "About GlbBus",
-    "description": "GlbBus is an AI-powered B2B platform connecting global buyers with verified industrial manufacturers.",
     "mission_title": "Our Mission",
-    "mission_text": "To break down information barriers in global industrial procurement, using AI to precisely match supply and demand, making cross-border sourcing as simple and efficient as local purchasing.",
-    "vision_title": "Platform Positioning",
-    "vision_desc": "GlbBus is a B2B industrial cross-border e-commerce AI platform covering the full chain — from product selection, content, operations, customer service to supply chain management. We partner with rigorously verified Chinese manufacturers through co-branded relationships to ensure product quality and delivery reliability.",
-    "team_title": "Our Team",
-    "team_text": "Our team consists of experienced professionals in cross-border e-commerce, industrial manufacturing, and AI technology, with extensive operational experience across China, the US, Europe, Southeast Asia, and the Middle East.",
+    "mission_text": "To break down information and connectivity barriers in global industrial procurement and cross-border communication.",
     "why_title": "Why Choose GlbBus",
-    "why_1": "Direct connection to verified manufacturers — no middlemen markups",
-    "why_2": "AI-powered matching to find the right products faster",
-    "why_3": "End-to-end management: sourcing → quoting → ordering → logistics → after-sales",
-    "why_4": "Multi-language support covering major global markets",
-    "why_5": "Rigorous quality control and on-time delivery guarantee"
+    "why_1": "Direct connection to verified manufacturers",
+    "why_2": "AI-powered matching for faster sourcing",
+    "why_3": "End-to-end management: sourcing → logistics → after-sales",
+    "why_4": "Multi-language support for global markets",
+    "why_5": "High-quality cross-border network from SHIXP"
   },
   "contact": {
     "page_title": "Contact Us",
@@ -104,8 +61,8 @@
     "cta_text": "If you have procurement needs or would like to become one of our supplier partners, feel free to contact us anytime."
   },
   "meta": {
-    "home_description": "GlbBus is an AI-powered B2B platform connecting global buyers with verified industrial manufacturers. Source industrial products across China, Russia, and emerging markets.",
-    "home_keywords": "B2B, industrial sourcing, manufacturing, China suppliers, AI procurement, cross-border, industrial products, verified manufacturers"
+    "home_description": "GlbBus — Global industrial services and cross-border network acceleration through SHIXP.",
+    "home_keywords": "B2B, industrial sourcing, network acceleration, cross-border, SHIXP"
   },
   "acceleration": {
     "page_title": "Cross-Border Network Acceleration",
@@ -121,8 +78,8 @@
     "feature_bandwidth": "Flexible Bandwidth",
     "feature_bandwidth_desc": "10M~100G bandwidth options available, supporting large bandwidth customization.",
     "use_cases_title": "Target Customers",
-    "use_case_1": "Cross-border e-commerce platforms (Amazon, eBay sellers needing stable access to dashboards and ads)",
-    "use_case_2": "Multinational enterprises requiring secure, reliable headquarters-branch connectivity",
+    "use_case_1": "Cross-border e-commerce platforms needing stable access to dashboards and ads",
+    "use_case_2": "Multinational enterprises requiring secure headquarters-branch connectivity",
     "use_case_3": "Research & education institutions accessing international academic resources",
     "use_case_4": "Gaming companies serving overseas players with low-latency connections",
     "use_case_5": "Cross-border financial services and settlement platforms",
