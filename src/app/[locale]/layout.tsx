@@ -1,10 +1,12 @@
 /**
  * 语言路由布局
  * 负责：lang 属性、dir 方向、字典注入
+ * 挂载：Tawk.to Live Chat Script + WhatsApp 浮动按钮
  */
 
 import { locales, isRtl, type Locale } from "@/i18n/config";
 import { loadDictionary } from "@/i18n/load-dictionary";
+import WhatsAppFloat from "@/components/layout/whatsapp-float";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -75,6 +77,14 @@ export default async function LocaleLayout({ children, params }: Props) {
     <html lang={locale} dir={dir}>
       <body className="min-h-screen bg-white text-slate-900 antialiased">
         {children}
+        <WhatsAppFloat />
+        {/* Tawk.to Live Chat 脚本 */}
+        <script
+          src="https://embed.tawk.to/6a538bf39b730d1d46be019e/1jtb5lcl5"
+          async
+          crossOrigin="anonymous"
+          charSet="UTF-8"
+        />
       </body>
     </html>
   );
