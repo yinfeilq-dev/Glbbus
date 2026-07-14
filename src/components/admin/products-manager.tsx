@@ -110,7 +110,13 @@ export default function ProductsManager({ suppliers }: { suppliers: Supplier[] }
       ? form.certifications.split(",").map((s: string) => s.trim()).filter(Boolean)
       : [];
 
+    // Build description JSON
+    const desc: Record<string, string> = {};
+    if (form.description_en) desc.en = form.description_en;
+    if (form.description_zh) desc.zh = form.description_zh;
+
     const body: Record<string, unknown> = {
+      action: editProduct ? "update-product" : "add-product",
       sku: form.sku,
       supplier_id: form.supplier_id,
       name_en: form.name_en,
@@ -122,22 +128,20 @@ export default function ProductsManager({ suppliers }: { suppliers: Supplier[] }
       fob_port: form.fob_port || null,
       certifications: certs,
       is_published: form.is_published,
+      description: Object.keys(desc).length > 0 ? desc : null,
     };
-
-    // Add description if provided
-    const desc: Record<string, string> = {};
-    if (form.description_en) desc.en = form.description_en;
-    if (form.description_zh) desc.zh = form.description_zh;
-    if (Object.keys(desc).length > 0) body.description = desc;
 
     // Add specifications if provided
     if (Object.keys(specs).length > 0) body.specifications = specs;
+
+    // Only add id for update
+    if (editProduct) body.id = editProduct.id;
 
     try {
       const res = await fetch("/api/admin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "add-product", ...body }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
       if (data.error) {
@@ -146,10 +150,12 @@ export default function ProductsManager({ suppliers }: { suppliers: Supplier[] }
           setDupCheck(true);
         }
       } else {
-        setFormMsg(`✅ 产品 ${data.product.name_en} (${data.product.sku}) 添加成功`);
+        const name = data.product?.name_en || data.product?.name_zh || "";
+        setFormMsg(`✅ ${editProduct ? "更新" : "添加"}产品 ${name} (${form.sku}) 成功`);
         resetForm();
         loadProducts();
         setShowAdd(false);
+        setEditProduct(null);
       }
     } catch {
       setFormMsg("❌ 提交失败");
@@ -163,6 +169,37 @@ export default function ProductsManager({ suppliers }: { suppliers: Supplier[] }
       body: JSON.stringify({ action: "toggle-product", id, is_published: !current }),
     });
     if (res.ok) loadProducts();
+  };
+
+  const handleEditProduct = async (product: Product) => {
+    // Fetch full product details from API
+    try {
+      const res = await fetch(`/api/admin?action=product&sku=${product.sku}`);
+      const data = await res.json();
+      const p = data.product;
+
+      setForm({
+        sku: p.sku || "",
+        supplier_id: p.supplier_id || "",
+        name_en: p.name_en || "",
+        name_zh: p.name_zh || "",
+        category: p.category || "",
+        base_price: p.base_price != null ? String(p.base_price) : "",
+        moq: p.moq != null ? String(p.moq) : "",
+        lead_time_days: p.lead_time_days != null ? String(p.lead_time_days) : "",
+        fob_port: p.fob_port || "",
+        certifications: Array.isArray(p.certifications) ? p.certifications.join(", ") : "",
+        description_en: p.description?.en || "",
+        description_zh: p.description?.zh || "",
+        specifications_json: p.specifications && Object.keys(p.specifications).length > 0
+          ? JSON.stringify(p.specifications, null, 2)
+          : "{}",
+        is_published: p.is_published ?? true,
+      });
+      setEditProduct(product);
+    } catch (err) {
+      alert("加载产品详情失败");
+    }
   };
 
   const handleDelete = async (id: string) => {
@@ -473,6 +510,12 @@ export default function ProductsManager({ suppliers }: { suppliers: Supplier[] }
                   </td>
                   <td className="px-3 py-2">
                     <div className="flex gap-1">
+                      <button
+                        onClick={() => handleEditProduct(p)}
+                        className="rounded bg-blue-50 px-1.5 py-0.5 text-[10px] text-blue-600 hover:bg-blue-100"
+                      >
+                        ✏️
+                      </button>
                       <button
                         onClick={() => handleDelete(p.id)}
                         className="rounded bg-red-50 px-1.5 py-0.5 text-[10px] text-red-500 hover:bg-red-100"

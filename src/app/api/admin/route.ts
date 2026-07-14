@@ -48,6 +48,31 @@ export async function GET(req: Request) {
     return NextResponse.json({ products: data });
   }
 
+  if (action === "product") {
+    const sku = url.searchParams.get("sku");
+    if (!sku) return NextResponse.json({ error: "sku required" }, { status: 400 });
+    const { data, error } = await supabase
+      .from("products")
+      .select(`*, suppliers (name, slug)`)
+      .eq("sku", sku)
+      .single();
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ product: data });
+  }
+
+  // GET single supplier by id for editing
+  if (action === "supplier") {
+    const id = url.searchParams.get("id");
+    if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
+    const { data, error } = await supabase
+      .from("suppliers")
+      .select("*")
+      .eq("id", id)
+      .single();
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ supplier: data });
+  }
+
   return NextResponse.json({ error: "unknown action" }, { status: 400 });
 }
 
@@ -181,6 +206,69 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ product: data });
+  }
+
+  // ===== Update Product =====
+  if (body.action === "update-product") {
+    if (!body.id) return NextResponse.json({ error: "id required" }, { status: 400 });
+
+    const updateData: Record<string, unknown> = {};
+    if (body.sku !== undefined) updateData.sku = body.sku;
+    if (body.supplier_id !== undefined) updateData.supplier_id = body.supplier_id;
+    if (body.name_en !== undefined) updateData.name_en = body.name_en;
+    if (body.name_zh !== undefined) updateData.name_zh = body.name_zh || null;
+    if (body.category !== undefined) updateData.category = body.category || null;
+    if (body.base_price !== undefined) updateData.base_price = body.base_price || null;
+    if (body.moq !== undefined) updateData.moq = body.moq || null;
+    if (body.lead_time_days !== undefined) updateData.lead_time_days = body.lead_time_days || null;
+    if (body.fob_port !== undefined) updateData.fob_port = body.fob_port || null;
+    if (body.certifications !== undefined) updateData.certifications = body.certifications || [];
+    if (body.is_published !== undefined) updateData.is_published = body.is_published;
+    if (body.description !== undefined) updateData.description = body.description;
+    if (body.specifications !== undefined) updateData.specifications = body.specifications || {};
+
+    const { data, error } = await supabase
+      .from("products")
+      .update(updateData)
+      .eq("id", body.id)
+      .select()
+      .single();
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ product: data });
+  }
+
+  // ===== Update Supplier =====
+  if (body.action === "update-supplier") {
+    if (!body.id) return NextResponse.json({ error: "id required" }, { status: 400 });
+
+    const updateData: Record<string, unknown> = {};
+    if (body.name !== undefined) updateData.name = body.name;
+    if (body.slug !== undefined) updateData.slug = body.slug;
+    if (body.country !== undefined) updateData.country = body.country || null;
+    if (body.certifications !== undefined) updateData.certifications = body.certifications || [];
+    if (body.production_capacity !== undefined) updateData.production_capacity = body.production_capacity || null;
+
+    const { data, error } = await supabase
+      .from("suppliers")
+      .update(updateData)
+      .eq("id", body.id)
+      .select()
+      .single();
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ supplier: data });
+  }
+
+  // ===== Delete Supplier =====
+  if (body.action === "delete-supplier") {
+    const { error } = await supabase
+      .from("suppliers")
+      .delete()
+      .eq("id", body.id);
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true });
   }
 
   // ===== Toggle Publish =====

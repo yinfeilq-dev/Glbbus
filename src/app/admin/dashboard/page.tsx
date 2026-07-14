@@ -59,6 +59,7 @@ export default function AdminDashboard() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [newSupplier, setNewSupplier] = useState({ name: "", slug: "", country: "", certifications: "", production_capacity: "" });
   const [supplierMsg, setSupplierMsg] = useState("");
+  const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null);
 
   // 产品列表
   const [allProducts, setAllProducts] = useState<any[]>([]);
@@ -132,11 +133,13 @@ export default function AdminDashboard() {
       return;
     }
     try {
+      const isEdit = !!editingSupplier;
       const res = await fetch("/api/admin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: "add-supplier",
+          action: isEdit ? "update-supplier" : "add-supplier",
+          id: isEdit ? editingSupplier!.id : undefined,
           name: newSupplier.name,
           slug: newSupplier.slug,
           country: newSupplier.country,
@@ -148,12 +151,42 @@ export default function AdminDashboard() {
       if (data.error) {
         setSupplierMsg("❌ " + data.error);
       } else {
-        setSupplierMsg(`✅ 供应商 ${data.supplier.name} 添加成功`);
+        setSupplierMsg(`✅ ${isEdit ? "更新" : "添加"}供应商 ${data.supplier.name} 成功`);
         setNewSupplier({ name: "", slug: "", country: "", certifications: "", production_capacity: "" });
+        setEditingSupplier(null);
         loadSuppliers();
       }
     } catch (err) {
       setSupplierMsg("❌ 提交失败");
+    }
+  };
+
+  const handleEditSupplier = async (supplier: Supplier) => {
+    setEditingSupplier(supplier);
+    setNewSupplier({
+      name: supplier.name,
+      slug: supplier.slug,
+      country: supplier.country || "",
+      certifications: Array.isArray((supplier as any).certifications)
+        ? (supplier as any).certifications.join(", ")
+        : (supplier as any).certifications || "",
+      production_capacity: (supplier as any).production_capacity || "",
+    });
+    setSupplierMsg("");
+  };
+
+  const handleDeleteSupplier = async (id: string) => {
+    if (!confirm("确定删除此供应商？此操作不可撤销。")) return;
+    const res = await fetch("/api/admin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "delete-supplier", id }),
+    });
+    if (res.ok) {
+      setSupplierMsg("✅ 供应商已删除");
+      loadSuppliers();
+    } else {
+      setSupplierMsg("❌ 删除失败");
     }
   };
 
@@ -350,27 +383,59 @@ export default function AdminDashboard() {
           <div className="grid gap-6 md:grid-cols-2">
             {/* 已有供应商 */}
             <div className="rounded-lg border border-slate-200 bg-white p-4">
-              <h2 className="mb-4 text-base font-semibold text-slate-900">现有供应商</h2>
+              <h2 className="mb-4 text-base font-semibold text-slate-900">
+                现有供应商 ({suppliers.length})
+              </h2>
               {suppliers.length === 0 ? (
                 <p className="text-xs text-slate-400">暂无供应商</p>
               ) : (
-                <div className="space-y-3">
-                  {suppliers.map((s) => (
-                    <div key={s.id} className="rounded-lg border border-slate-100 bg-slate-50 p-3">
-                      <p className="font-medium text-slate-900">{s.name}</p>
-                      <p className="text-xs text-slate-400">
-                        slug: <code className="font-mono">{s.slug}</code>
-                        {s.country && ` | 📍 ${s.country}`}
-                      </p>
+                <div className="max-h-[500px] space-y-3 overflow-y-auto">
+                  {suppliers.map((s: any) => (
+                    <div key={s.id} className="group relative rounded-lg border border-slate-100 bg-slate-50 p-3">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="font-medium text-slate-900">{s.name}</p>
+                          <p className="text-xs text-slate-400">
+                            slug: <code className="font-mono">{s.slug}</code>
+                            {s.country && ` | 📍 ${s.country}`}
+                          </p>
+                          {s.certifications && s.certifications.length > 0 && (
+                            <p className="mt-1 text-xs text-slate-400">
+                              ✅ {Array.isArray(s.certifications) ? s.certifications.join(", ") : s.certifications}
+                            </p>
+                          )}
+                          {s.production_capacity && (
+                            <p className="mt-0.5 text-xs text-slate-400">
+                              🏭 {s.production_capacity}
+                            </p>
+                          )}
+                        </div>
+                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => handleEditSupplier(s)}
+                            className="rounded bg-blue-50 px-1.5 py-0.5 text-[10px] text-blue-600 hover:bg-blue-100"
+                          >
+                            ✏️
+                          </button>
+                          <button
+                            onClick={() => handleDeleteSupplier(s.id)}
+                            className="rounded bg-red-50 px-1.5 py-0.5 text-[10px] text-red-500 hover:bg-red-100"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* 新增供应商 */}
+            {/* 新增 / 编辑供应商 */}
             <div className="rounded-lg border border-slate-200 bg-white p-4">
-              <h2 className="mb-4 text-base font-semibold text-slate-900">新增供应商</h2>
+              <h2 className="mb-4 text-base font-semibold text-slate-900">
+                {editingSupplier ? `编辑: ${editingSupplier.name}` : "新增供应商"}
+              </h2>
               <div className="space-y-3">
                 <div>
                   <label className="mb-1 block text-xs font-medium text-slate-500">名称 *</label>
@@ -417,12 +482,26 @@ export default function AdminDashboard() {
                     placeholder="100,000 pcs/month"
                   />
                 </div>
-                <button
-                  onClick={handleAddSupplier}
-                  className="w-full rounded-lg bg-blue-600 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-                >
-                  ➕ 添加供应商
-                </button>
+                <div className="flex gap-2">
+                  {editingSupplier && (
+                    <button
+                      onClick={() => {
+                        setEditingSupplier(null);
+                        setNewSupplier({ name: "", slug: "", country: "", certifications: "", production_capacity: "" });
+                        setSupplierMsg("");
+                      }}
+                      className="flex-1 rounded-lg border border-slate-200 py-2 text-sm text-slate-600 hover:bg-slate-50"
+                    >
+                      取消
+                    </button>
+                  )}
+                  <button
+                    onClick={handleAddSupplier}
+                    className="flex-1 rounded-lg bg-blue-600 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+                  >
+                    {editingSupplier ? "💾 保存修改" : "➕ 添加供应商"}
+                  </button>
+                </div>
                 {supplierMsg && (
                   <p className={`text-xs ${supplierMsg.startsWith("✅") ? "text-green-600" : "text-red-500"}`}>
                     {supplierMsg}
