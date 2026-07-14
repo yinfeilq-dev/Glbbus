@@ -1,0 +1,65 @@
+[
+  {
+    "sku": "DW-UHP-120M",
+    "supplier_slug": "dewu-additive",
+    "name_en": "DW-UHP-120M Ultra High Precision Metal 3D Printer",
+    "name_zh": "DW-UHP-120M 超高精度金属3D打印机",
+    "category": "Metal 3D Printer",
+    "specifications": {
+      "Build_Plate_Size": "Ф120×180mm",
+      "Machine_Weight": "~800kg",
+      "Layer_Thickness": "5-20μm (adjustable)",
+      "Spot_Size": "≤25μm",
+      "Surface_Roughness": "Ra0.5-1.6μm",
+      "Laser_System": "Fiber Laser, 100W",
+      "Max_Preheat_Temp": "≥200°C",
+      "Materials": "Titanium alloy, Aluminum alloy, Stainless steel, High-temp alloy"
+    },
+    "base_price": null,
+    "certifications": ["CE"],
+    "moq": 1,
+    "lead_time_days": 30,
+    "fob_port": "Shanghai"
+  },
+  {
+    "sku": "DW-UHP-70M",
+    "supplier_slug": "dewu-additive",
+    "name_en": "DW-UHP-70M Ultra High Precision Metal 3D Printer",
+    "name_zh": "DW-UHP-70M 超高精度金属3D打印机",
+    "category": "Metal 3D Printer",
+    "specifications": {
+      "Build_Plate_Size": "Ф70×100mm",
+      "Layer_Thickness": "5-30μm (adjustable)",
+      "Spot_Size": "≤25μm",
+      "Surface_Roughness": "Ra0.5-1.6μm",
+      "Laser_System": "Fiber Laser, 100W",
+      "Preheat_Temp": "≥400°C (optional)",
+      "Materials": "Titanium alloy, Aluminum alloy, Stainless steel, High-temp alloy"
+    },
+    "base_price": null,
+    "certifications": ["CE"],
+    "moq": 1,
+    "lead_time_days": 30,
+    "fob_port": "Shanghai"
+  },
+  {
+    "sku": "DW-HP-200M",
+    "supplier_slug": "dewu-additive",
+    "name_en": "DW-HP-200M High Precision Metal 3D Printer",
+    "name_zh": "DW-HP-200M 高精度金属3D打印机",
+    "category": "Metal 3D Printer",
+    "specifications": {
+      "Build_Volume": "200×200×200mm",
+      "Layer_Thickness": "10-40μm (adjustable)",
+      "Spot_Size": "≤40μm",
+      "Surface_Roughness": "Ra1.6-3.2μm",
+      "Laser_System": "Fiber Laser, 200W (single) / 200W×2 (dual)",
+      "Materials": "Titanium alloy, Aluminum alloy, Stainless steel, High-temp alloy"
+    },
+    "base_price": null,
+    "certifications": ["CE"],
+    "moq": 1,
+    "lead_time_days": 30,
+    "fob_port": "Shanghai"
+  }
+]

@@ -22,6 +22,7 @@
   },
   "navigation": {
     "home": "首页",
+    "products": "产品中心",
     "acceleration": "网络加速",
     "contact": "联系我们"
   },
@@ -63,6 +64,25 @@
   "meta": {
     "home_description": "GlbBus — 全球工业服务与跨境网络加速，基于国家（上海）互联网交换中心（SHIXP）。",
     "home_keywords": "B2B, 工业品, 网络加速, 跨境, SHIXP"
+  },
+  "products": {
+    "page_title": "产品中心",
+    "page_desc": "浏览认证制造商的产品目录，AI 匹配快速找到合适产品",
+    "filter_by_supplier": "按供应商筛选：",
+    "all": "全部",
+    "no_products": "暂无产品。",
+    "price": "单价",
+    "lead_time": "交期",
+    "fob_port": "FOB 港口",
+    "description": "产品描述",
+    "specifications": "技术参数",
+    "certifications": "认证资质",
+    "inquiry_title": "立即询盘",
+    "inquiry_success": "询盘已发送！我们会在24小时内回复您。",
+    "phone": "电话",
+    "country": "国家",
+    "company": "公司名",
+    "quantity": "数量"
   },
   "acceleration": {
     "page_title": "跨境网络加速",

@@ -37,7 +37,13 @@ export default async function HomePage({ params }: Props) {
             <p className="mt-4 max-w-2xl text-lg text-white/75">
               {t(dict, "home.hero_subtitle")}
             </p>
-            <div className="mt-10 flex gap-4">
+            <div className="mt-10 flex flex-wrap gap-3">
+              <Link
+                href={localizedPath(l, "/products")}
+                className="rounded-lg bg-amber-400 px-6 py-3 text-sm font-semibold text-slate-900 hover:bg-amber-300 transition"
+              >
+                🛒 {t(dict, "navigation.products") || "Browse Products"}
+              </Link>
               <Link
                 href={localizedPath(l, "/acceleration")}
                 className="rounded-lg bg-white px-6 py-3 text-sm font-semibold text-blue-700 hover:bg-blue-50 transition"

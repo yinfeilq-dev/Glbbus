@@ -12,6 +12,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import TargetsPage from "./targets";
+import ProductsManager from "@/components/admin/products-manager";
 
 // ===== 类型 =====
 type Supplier = {
@@ -46,7 +47,7 @@ export default function AdminDashboard() {
   const [password, setPassword] = useState("");
 
   // Tab 状态
-  const [activeTab, setActiveTab] = useState<"bulk" | "suppliers" | "products" | "inquiries" | "targets">("bulk");
+  const [activeTab, setActiveTab] = useState<"bulk" | "suppliers" | "products" | "products-manager" | "inquiries" | "targets">("bulk");
 
   // 批量录入
   const [jsonInput, setJsonInput] = useState("");
@@ -252,6 +253,9 @@ export default function AdminDashboard() {
           </button>
           <button onClick={() => setActiveTab("products")} className={tabClass("products")}>
             📋 产品列表
+          </button>
+          <button onClick={() => setActiveTab("products-manager")} className={tabClass("products-manager")}>
+            🛠 产品管理
           </button>
           <button onClick={() => setActiveTab("inquiries")} className={tabClass("inquiries")}>
             📩 询盘管理
@@ -574,6 +578,7 @@ export default function AdminDashboard() {
           </div>
         )}
         {activeTab === "targets" && <TargetsPage />}
+        {activeTab === "products-manager" && <ProductsManager suppliers={suppliers} />}
       </main>
     </div>
   );

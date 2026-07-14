@@ -27,13 +27,15 @@ export default function Footer({ locale, dict }: Props) {
           </div>
           <div>
             <h3 className="mb-3 text-sm font-semibold text-slate-900">
-              {nav.products ?? "Products"}
+              <a href={`/${locale}/products`} className="hover:text-blue-600">
+                {nav.products ?? "Products"}
+              </a>
             </h3>
             <ul className="space-y-2 text-xs text-slate-500">
-              <li>Aluminum Profiles</li>
-              <li>Fasteners & Hardware</li>
-              <li>Electrical Components</li>
-              <li>Industrial Machinery</li>
+              <li><a href={`/${locale}/products?category=Metal%203D%20Printer`} className="hover:text-blue-600">Metal 3D Printers</a></li>
+              <li><a href={`/${locale}/products`} className="hover:text-blue-600">Aluminum Profiles</a></li>
+              <li><a href={`/${locale}/products`} className="hover:text-blue-600">Fasteners & Hardware</a></li>
+              <li><a href={`/${locale}/products`} className="hover:text-blue-600">Industrial Machinery</a></li>
             </ul>
           </div>
           <div>

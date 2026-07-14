@@ -22,6 +22,7 @@
   },
   "navigation": {
     "home": "Home",
+    "products": "Products",
     "acceleration": "Acceleration",
     "contact": "Contact"
   },
@@ -63,6 +64,25 @@
   "meta": {
     "home_description": "GlbBus — Global industrial services and cross-border network acceleration through SHIXP.",
     "home_keywords": "B2B, industrial sourcing, network acceleration, cross-border, SHIXP"
+  },
+  "products": {
+    "page_title": "Product Center",
+    "page_desc": "Browse our product catalog from verified manufacturers, AI-matched for your needs",
+    "filter_by_supplier": "Filter by supplier:",
+    "all": "All",
+    "no_products": "No products available yet.",
+    "price": "Price",
+    "lead_time": "Lead Time",
+    "fob_port": "FOB Port",
+    "description": "Description",
+    "specifications": "Technical Specifications",
+    "certifications": "Certifications",
+    "inquiry_title": "Inquire Now",
+    "inquiry_success": "Inquiry sent! We will get back to you within 24h.",
+    "phone": "Phone",
+    "country": "Country",
+    "company": "Company",
+    "quantity": "Quantity"
   },
   "acceleration": {
     "page_title": "Cross-Border Network Acceleration",

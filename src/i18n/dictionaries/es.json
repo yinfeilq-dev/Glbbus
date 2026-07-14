@@ -75,6 +75,25 @@
     "home_description": "GlbBus es una plataforma B2B impulsada por IA que conecta compradores globales con fabricantes industriales verificados de China, Rusia y mercados emergentes.",
     "home_keywords": "B2B, abastecimiento industrial, fabricación, proveedores de China, IA, compras transfronterizas, productos industriales"
   },
+  "products": {
+    "page_title": "Centro de Productos",
+    "page_desc": "Explore nuestro catálogo de productos de fabricantes verificados, emparejados por IA",
+    "filter_by_supplier": "Filtrar por proveedor:",
+    "all": "Todos",
+    "no_products": "No hay productos disponibles aún.",
+    "price": "Precio",
+    "lead_time": "Plazo",
+    "fob_port": "Puerto FOB",
+    "description": "Descripción",
+    "specifications": "Especificaciones Técnicas",
+    "certifications": "Certificaciones",
+    "inquiry_title": "Consultar",
+    "inquiry_success": "¡Consulta enviada! Le responderemos en un plazo de 24 h.",
+    "phone": "Teléfono",
+    "country": "País",
+    "company": "Empresa",
+    "quantity": "Cantidad"
+  },
   "acceleration": {
     "page_title": "Aceleración de Red Transfronteriza",
     "hero_title": "Aceleración de Red Global",
