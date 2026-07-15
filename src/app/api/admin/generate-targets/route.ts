@@ -94,8 +94,11 @@ export async function POST(req: Request) {
 
   const apiKey = process.env.OPENAI_API_KEY;
 
+  console.log("[generate-targets] mode:", mode, "productSku:", productSku, "env.OPENAI_API_KEY exists:", !!apiKey, "key length:", apiKey?.length);
+
   // If no OpenAI key, use fallback
   if (!apiKey) {
+    console.log("[generate-targets] No API key found, using fallback");
     const targets = fallbackGenerateTargets(effectiveIndustry, effectiveCountry);
     return NextResponse.json({ targets });
   }
