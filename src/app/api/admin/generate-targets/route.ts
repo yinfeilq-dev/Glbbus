@@ -92,11 +92,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "industry and country are required" }, { status: 400 });
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.DEEPSEEK_API_KEY;
 
-  console.log("[generate-targets] mode:", mode, "productSku:", productSku, "env.OPENAI_API_KEY exists:", !!apiKey, "key length:", apiKey?.length);
+  console.log("[generate-targets] mode:", mode, "productSku:", productSku, "env.DEEPSEEK_API_KEY exists:", !!apiKey, "key length:", apiKey?.length);
 
-  // If no OpenAI key, use fallback
+  // If no DeepSeek key, use fallback
   if (!apiKey) {
     console.log("[generate-targets] No API key found, using fallback");
     const targets = fallbackGenerateTargets(effectiveIndustry, effectiveCountry);
@@ -159,14 +159,14 @@ Example format:
 ]`;
     }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: "deepseek-chat",
         messages: [
           {
             role: "system",
@@ -182,7 +182,7 @@ Example format:
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("OpenAI API error:", errorText);
+      console.error("DeepSeek API error:", errorText);
       const targets = fallbackGenerateTargets(effectiveIndustry, effectiveCountry);
       return NextResponse.json({ targets });
     }
