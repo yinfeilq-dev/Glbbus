@@ -31,6 +31,13 @@ type GeneratedTarget = {
   notes: string;
 };
 
+type ProductProfile = {
+  sku: string;
+  name: string;
+  supplier: string;
+  industry: string;
+};
+
 const STATUS_OPTIONS = ["new", "contacted", "replied", "meeting", "closed_won", "closed_lost"];
 const SOURCE_OPTIONS = ["Google", "LinkedIn", "Alibaba", "TradeShow", "Referral", "Manual", "Other"];
 
@@ -139,6 +146,9 @@ export default function TargetsPage() {
   });
 
   // ===== AI Generation State =====
+  const [aiMode, setAiMode] = useState<"manual" | "product">("product");
+  const [productProfiles, setProductProfiles] = useState<ProductProfile[]>([]);
+  const [selectedProductSku, setSelectedProductSku] = useState("");
   const [aiIndustry, setAiIndustry] = useState("");
   const [aiCountry, setAiCountry] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
@@ -157,6 +167,19 @@ export default function TargetsPage() {
     } catch {}
     setLoading(false);
   }, [filter]);
+
+  // Load product profiles on mount
+  useEffect(() => {
+    fetch("/api/admin/generate-targets")
+      .then((r) => r.json())
+      .then((d) => {
+        setProductProfiles(d.products || []);
+        if (d.products?.length > 0) {
+          setSelectedProductSku(d.products[0].sku);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => { fetchLeads(); }, [fetchLeads]);
 
@@ -197,6 +220,31 @@ export default function TargetsPage() {
 
   // ===== AI Generate Targets =====
   const handleAiGenerate = async () => {
+    if (aiMode === "product") {
+      if (!selectedProductSku || !aiCountry.trim()) return;
+      setAiLoading(true);
+      setAiTargets([]);
+      try {
+        const res = await fetch("/api/admin/generate-targets", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            mode: "product",
+            productSku: selectedProductSku,
+            country: aiCountry.trim(),
+          }),
+        });
+        if (!res.ok) throw new Error("Failed to generate");
+        const data = await res.json();
+        setAiTargets(data.targets || []);
+      } catch (err) {
+        console.error(err);
+        alert("生成失败，请重试");
+      }
+      setAiLoading(false);
+      return;
+    }
+
     if (!aiIndustry.trim() || !aiCountry.trim()) return;
     setAiLoading(true);
     setAiTargets([]);
@@ -204,7 +252,11 @@ export default function TargetsPage() {
       const res = await fetch("/api/admin/generate-targets", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ industry: aiIndustry.trim(), country: aiCountry.trim() }),
+        body: JSON.stringify({
+          mode: "manual",
+          industry: aiIndustry.trim(),
+          country: aiCountry.trim(),
+        }),
       });
       if (!res.ok) throw new Error("Failed to generate");
       const data = await res.json();
@@ -294,25 +346,69 @@ export default function TargetsPage() {
         ))}
       </div>
 
-      {/* ===== 2a. AI Generate Targets Input ===== */}
+      {/* ===== AI Generate Targets Input ===== */}
       <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
         <h3 className="mb-3 text-sm font-semibold text-blue-800">🤖 AI 生成目标客户</h3>
+
+        {/* Mode Toggle */}
+        <div className="mb-3 flex gap-2">
+          <button
+            onClick={() => setAiMode("product")}
+            className={`rounded-lg px-3 py-1.5 text-xs font-medium ${
+              aiMode === "product"
+                ? "bg-blue-600 text-white"
+                : "bg-white text-slate-600 border border-blue-200 hover:bg-blue-50"
+            }`}
+          >
+            📦 按产品寻找客户
+          </button>
+          <button
+            onClick={() => setAiMode("manual")}
+            className={`rounded-lg px-3 py-1.5 text-xs font-medium ${
+              aiMode === "manual"
+                ? "bg-blue-600 text-white"
+                : "bg-white text-slate-600 border border-blue-200 hover:bg-blue-50"
+            }`}
+          >
+            ✏️ 自定义行业
+          </button>
+        </div>
+
         <div className="flex flex-wrap gap-3">
-          <input
-            value={aiIndustry}
-            onChange={(e) => setAiIndustry(e.target.value)}
-            placeholder="行业 (e.g. aluminum profiles)"
-            className="flex-1 min-w-[200px] rounded-lg border border-blue-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
-          />
+          {aiMode === "product" ? (
+            <select
+              value={selectedProductSku}
+              onChange={(e) => setSelectedProductSku(e.target.value)}
+              className="flex-1 min-w-[250px] rounded-lg border border-blue-200 px-3 py-2 text-sm outline-none focus:border-blue-400 bg-white"
+            >
+              {productProfiles.map((p) => (
+                <option key={p.sku} value={p.sku}>
+                  {p.supplier} — {p.name.slice(0, 50)}…
+                </option>
+              ))}
+            </select>
+          ) : (
+            <input
+              value={aiIndustry}
+              onChange={(e) => setAiIndustry(e.target.value)}
+              placeholder="行业 (e.g. metal 3D printing)"
+              className="flex-1 min-w-[200px] rounded-lg border border-blue-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
+            />
+          )}
           <input
             value={aiCountry}
             onChange={(e) => setAiCountry(e.target.value)}
-            placeholder="国家 (e.g. Germany)"
+            placeholder="目标国家 (e.g. Germany)"
             className="flex-1 min-w-[150px] rounded-lg border border-blue-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
           />
           <button
             onClick={handleAiGenerate}
-            disabled={aiLoading || !aiIndustry.trim() || !aiCountry.trim()}
+            disabled={
+              aiLoading ||
+              (aiMode === "product"
+                ? !selectedProductSku || !aiCountry.trim()
+                : !aiIndustry.trim() || !aiCountry.trim())
+            }
             className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {aiLoading ? (
