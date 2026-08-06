@@ -149,6 +149,19 @@ export default async function ProductsPage({ params }: Props) {
                   href={`/${l}/products/${product.sku}`}
                   className="group rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md hover:border-blue-300"
                 >
+                  {/* Product Image */}
+                  {product.images && product.images.length > 0 && (
+                    <div className="mb-3 aspect-square w-full overflow-hidden rounded-lg bg-slate-100">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={product.images[0]}
+                        alt={isChinese && product.name_zh ? product.name_zh : product.name_en}
+                        className="h-full w-full object-cover transition group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+
                   {/* Category Badge */}
                   {product.category && (
                     <span className="mb-2 inline-block rounded-full bg-blue-50 px-2.5 py-0.5 text-[10px] font-medium text-blue-600">

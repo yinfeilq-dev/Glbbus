@@ -101,6 +101,18 @@ export default async function ProductDetailPage({ params }: Props) {
           <div className="grid gap-8 lg:grid-cols-5">
             {/* Left: Product Info */}
             <div className="lg:col-span-3">
+              {/* Product Image */}
+              {product.images && product.images.length > 0 && (
+                <div className="mb-5 aspect-video w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={product.images[0]}
+                    alt={isChinese && product.name_zh ? product.name_zh : product.name_en}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              )}
+
               {/* Category */}
               {product.category && (
                 <span className="mb-3 inline-block rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
