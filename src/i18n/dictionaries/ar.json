@@ -92,7 +92,14 @@
     "phone": "الهاتف",
     "country": "الدولة",
     "company": "الشركة",
-    "quantity": "الكمية"
+    "quantity": "الكمية",
+    "browse_categories": "الفئات",
+    "category_groups": {
+      "metal-3d-printers": "طابعات المعادن ثلاثية الأبعاد",
+      "stainless-steel-pipes": "أنابيب الفولاذ المقاوم للصدأ",
+      "pipe-fittings": "وصلات الفولاذ المقاوم للصدأ"
+    },
+    "items": "منتجات"
   },
   "acceleration": {
     "page_title": "تسريع الشبكة عبر الحدود",

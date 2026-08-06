@@ -82,7 +82,14 @@
     "phone": "Phone",
     "country": "Country",
     "company": "Company",
-    "quantity": "Quantity"
+    "quantity": "Quantity",
+    "browse_categories": "Categories",
+    "category_groups": {
+      "metal-3d-printers": "Metal 3D Printers",
+      "stainless-steel-pipes": "Stainless Steel Pipes & Tubes",
+      "pipe-fittings": "Stainless Steel Fittings"
+    },
+    "items": "items"
   },
   "acceleration": {
     "page_title": "Cross-Border Network Acceleration",

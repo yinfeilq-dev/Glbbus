@@ -92,7 +92,14 @@
     "phone": "Телефон",
     "country": "Страна",
     "company": "Компания",
-    "quantity": "Количество"
+    "quantity": "Количество",
+    "browse_categories": "Категории",
+    "category_groups": {
+      "metal-3d-printers": "Металлические 3D-принтеры",
+      "stainless-steel-pipes": "Трубы из нержавеющей стали",
+      "pipe-fittings": "Фитинги из нержавеющей стали"
+    },
+    "items": "шт."
   },
   "acceleration": {
     "page_title": "Международное ускорение сети",

@@ -92,7 +92,14 @@
     "phone": "Teléfono",
     "country": "País",
     "company": "Empresa",
-    "quantity": "Cantidad"
+    "quantity": "Cantidad",
+    "browse_categories": "Categorías",
+    "category_groups": {
+      "metal-3d-printers": "Impresoras 3D de Metal",
+      "stainless-steel-pipes": "Tubos de Acero Inoxidable",
+      "pipe-fittings": "Accesorios de Acero Inoxidable"
+    },
+    "items": "artículos"
   },
   "acceleration": {
     "page_title": "Aceleración de Red Transfronteriza",

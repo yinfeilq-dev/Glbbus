@@ -82,7 +82,14 @@
     "phone": "电话",
     "country": "国家",
     "company": "公司名",
-    "quantity": "数量"
+    "quantity": "数量",
+    "browse_categories": "产品分类",
+    "category_groups": {
+      "metal-3d-printers": "金属 3D 打印设备",
+      "stainless-steel-pipes": "不锈钢管材",
+      "pipe-fittings": "不锈钢管件"
+    },
+    "items": "件"
   },
   "acceleration": {
     "page_title": "跨境网络加速",

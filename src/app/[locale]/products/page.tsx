@@ -91,8 +91,35 @@ export default async function ProductsPage({ params }: Props) {
   const nav = dict.navigation as Record<string, string>;
   const common = dict.common as Record<string, string>;
   const productsDict = dict.products as Record<string, string> ?? {};
+  const categoryGroups = (productsDict.category_groups as Record<string, string>) ?? {};
 
   const isChinese = l === "zh";
+
+  // 分类分组：category -> 组 key 映射
+  const CATEGORY_TO_GROUP: Record<string, string> = {
+    "Metal 3D Printer": "metal-3d-printers",
+    "Stainless Steel Pipe": "stainless-steel-pipes",
+    "Stainless Steel Tube": "stainless-steel-pipes",
+    "Manifold Tube": "stainless-steel-pipes",
+    "Pipe Fittings": "pipe-fittings",
+  };
+
+  // 组顺序（保证展示顺序稳定）
+  const GROUP_ORDER = ["metal-3d-printers", "stainless-steel-pipes", "pipe-fittings"];
+
+  // 按组归类产品
+  const grouped: Record<string, ProductWithSupplier[]> = {};
+  for (const p of products) {
+    const groupKey = (p.category && CATEGORY_TO_GROUP[p.category]) || "other";
+    if (!grouped[groupKey]) grouped[groupKey] = [];
+    grouped[groupKey].push(p);
+  }
+
+  // 有产品的组（按固定顺序 + 其他）
+  const activeGroups = [
+    ...GROUP_ORDER.filter((g) => grouped[g]?.length),
+    ...(grouped["other"]?.length ? ["other"] : []),
+  ];
 
   return (
     <>
@@ -110,8 +137,30 @@ export default async function ProductsPage({ params }: Props) {
           </div>
         </section>
 
-        {/* Supplier Filter */}
+        {/* Category Nav + Supplier Filter */}
         <section className="mx-auto max-w-7xl px-4 py-6">
+          {/* 分类锚点导航 */}
+          {activeGroups.length > 1 && (
+            <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4">
+              <div className="mb-3 text-sm font-semibold text-slate-700">
+                {productsDict.browse_categories || "Categories"}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {activeGroups.map((g) => (
+                  <a
+                    key={g}
+                    href={`#cat-${g}`}
+                    className="rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-xs font-medium text-blue-700 transition hover:bg-blue-100"
+                  >
+                    {categoryGroups[g] || g}
+                    <span className="ml-1 text-blue-400">({grouped[g].length})</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 供应商筛选 */}
           <div className="flex flex-wrap items-center gap-3">
             <span className="text-sm font-medium text-slate-600">
               {productsDict.filter_by_supplier || "Filter by supplier:"}
@@ -134,7 +183,7 @@ export default async function ProductsPage({ params }: Props) {
           </div>
         </section>
 
-        {/* Product Grid */}
+        {/* Product Sections by Group */}
         <section className="mx-auto max-w-7xl px-4 pb-16">
           {products.length === 0 ? (
             <div className="flex flex-col items-center py-20 text-slate-400">
@@ -142,87 +191,97 @@ export default async function ProductsPage({ params }: Props) {
               <p className="text-base font-medium">{productsDict.no_products || "No products available yet."}</p>
             </div>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {products.map((product) => (
-                <Link
-                  key={product.id}
-                  href={`/${l}/products/${product.sku}`}
-                  className="group rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md hover:border-blue-300"
-                >
-                  {/* Product Image */}
-                  {product.images && product.images.length > 0 && (
-                    <div className="mb-3 aspect-square w-full overflow-hidden rounded-lg bg-slate-100">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={product.images[0]}
-                        alt={isChinese && product.name_zh ? product.name_zh : product.name_en}
-                        className="h-full w-full object-cover transition group-hover:scale-105"
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
-
-                  {/* Category Badge */}
-                  {product.category && (
-                    <span className="mb-2 inline-block rounded-full bg-blue-50 px-2.5 py-0.5 text-[10px] font-medium text-blue-600">
-                      {product.category}
+            <div className="space-y-14">
+              {activeGroups.map((g) => (
+                <div key={g} id={`cat-${g}`} className="scroll-mt-24">
+                  {/* Group Title */}
+                  <div className="mb-6 flex items-center gap-3">
+                    <h2 className="text-xl font-bold text-slate-900">
+                      {categoryGroups[g] || g}
+                    </h2>
+                    <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-500">
+                      {grouped[g].length} {productsDict.items || "items"}
                     </span>
-                  )}
-
-                  {/* Product Name */}
-                  <h3 className="mt-1 text-sm font-semibold text-slate-900 group-hover:text-blue-600 line-clamp-2">
-                    {isChinese && product.name_zh ? product.name_zh : product.name_en}
-                  </h3>
-
-                  {/* Supplier */}
-                  <p className="mt-1 text-xs text-slate-400">
-                    {product.suppliers?.name || "GlbBus"}
-                  </p>
-
-                  {/* Key Specs */}
-                  {product.specifications && Object.keys(product.specifications).length > 0 && (
-                    <div className="mt-3 space-y-1">
-                      {Object.entries(product.specifications).slice(0, 3).map(([key, val]) => (
-                        <div key={key} className="flex justify-between text-xs">
-                          <span className="text-slate-400 capitalize">{key}:</span>
-                          <span className="text-slate-600 font-medium">{val}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Price & Lead Time */}
-                  <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3">
-                    <div>
-                      {product.base_price != null && (
-                        <span className="text-sm font-bold text-green-600">
-                          ${product.base_price.toFixed(2)}
-                        </span>
-                      )}
-                      {product.moq && (
-                        <span className="ml-2 text-[10px] text-slate-400">
-                          MOQ: {product.moq}
-                        </span>
-                      )}
-                    </div>
-                    {product.lead_time_days && (
-                      <span className="text-[10px] text-slate-400">
-                        {product.lead_time_days}d
-                      </span>
-                    )}
                   </div>
 
-                  {/* Certifications */}
-                  {product.certifications && product.certifications.length > 0 && (
-                    <div className="mt-2 flex flex-wrap gap-1">
-                      {product.certifications.map((cert) => (
-                        <span key={cert} className="rounded bg-green-50 px-1.5 py-0.5 text-[9px] text-green-600">
-                          {cert}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </Link>
+                  {/* Product Grid */}
+                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {grouped[g].map((product) => (
+                      <Link
+                        key={product.id}
+                        href={`/${l}/products/${product.sku}`}
+                        className="group rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md hover:border-blue-300"
+                      >
+                        {/* Product Image */}
+                        {product.images && product.images.length > 0 && (
+                          <div className="mb-3 aspect-square w-full overflow-hidden rounded-lg bg-slate-100">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={product.images[0]}
+                              alt={isChinese && product.name_zh ? product.name_zh : product.name_en}
+                              className="h-full w-full object-cover transition group-hover:scale-105"
+                              loading="lazy"
+                            />
+                          </div>
+                        )}
+
+                        {/* Product Name */}
+                        <h3 className="mt-1 text-sm font-semibold text-slate-900 group-hover:text-blue-600 line-clamp-2">
+                          {isChinese && product.name_zh ? product.name_zh : product.name_en}
+                        </h3>
+
+                        {/* Supplier */}
+                        <p className="mt-1 text-xs text-slate-400">
+                          {product.suppliers?.name || "GlbBus"}
+                        </p>
+
+                        {/* Key Specs */}
+                        {product.specifications && Object.keys(product.specifications).length > 0 && (
+                          <div className="mt-3 space-y-1">
+                            {Object.entries(product.specifications).slice(0, 3).map(([key, val]) => (
+                              <div key={key} className="flex justify-between text-xs">
+                                <span className="text-slate-400 capitalize">{key}:</span>
+                                <span className="text-slate-600 font-medium">{val}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Price & Lead Time */}
+                        <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3">
+                          <div>
+                            {product.base_price != null && (
+                              <span className="text-sm font-bold text-green-600">
+                                ${product.base_price.toFixed(2)}
+                              </span>
+                            )}
+                            {product.moq && (
+                              <span className="ml-2 text-[10px] text-slate-400">
+                                MOQ: {product.moq}
+                              </span>
+                            )}
+                          </div>
+                          {product.lead_time_days && (
+                            <span className="text-[10px] text-slate-400">
+                              {product.lead_time_days}d
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Certifications */}
+                        {product.certifications && product.certifications.length > 0 && (
+                          <div className="mt-2 flex flex-wrap gap-1">
+                            {product.certifications.map((cert) => (
+                              <span key={cert} className="rounded bg-green-50 px-1.5 py-0.5 text-[9px] text-green-600">
+                                {cert}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           )}
