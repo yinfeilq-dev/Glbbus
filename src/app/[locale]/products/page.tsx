@@ -91,7 +91,7 @@ export default async function ProductsPage({ params }: Props) {
   const nav = dict.navigation as Record<string, string>;
   const common = dict.common as Record<string, string>;
   const productsDict = dict.products as Record<string, string> ?? {};
-  const categoryGroups = (productsDict.category_groups as Record<string, string>) ?? {};
+  const categoryGroups = (productsDict.category_groups as unknown as Record<string, string>) ?? {};
 
   const isChinese = l === "zh";
 
