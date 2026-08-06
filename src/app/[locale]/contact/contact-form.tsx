@@ -25,15 +25,17 @@ export default function ContactForm({ contact, locale }: Props) {
     setFormState("sending");
 
     try {
-      const res = await fetch("/api/inquiries", {
+      const res = await fetch("/api/inquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          product_id: "",
-          contact_name: name,
-          email: email,
+          product_id: "00000000-0000-0000-0000-000000000001",
+          buyer_name: name,
+          buyer_email: email,
           message: message,
-          locale: locale,
+          buyer_country: "",
+          company_name: "",
+          quantity: 1,
         }),
       });
 

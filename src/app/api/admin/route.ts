@@ -48,6 +48,37 @@ export async function GET(req: Request) {
     return NextResponse.json({ products: data });
   }
 
+  // ===== 订单列表（含关联数据） =====
+  if (action === "list-orders") {
+    const statusFilter = url.searchParams.get("status");
+    let query = supabase
+      .from("orders")
+      .select(`
+        id, quotation_id, quantity, total_amount, status,
+        shipping_tracking, production_progress, created_at, updated_at,
+        quotations!inner (
+          id, unit_price, status as quotation_status,
+          inquiries!inner (
+            id, buyer_name, buyer_email, buyer_country,
+            company_name, message,
+            products!inner (name_en, sku)
+          )
+        )
+      `)
+      .order("created_at", { ascending: false })
+      .limit(50);
+
+    if (statusFilter && statusFilter !== "all") {
+      query = query.eq("status", statusFilter);
+    }
+
+    const { data, error } = await query;
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ orders: data });
+  }
+
   if (action === "product") {
     const sku = url.searchParams.get("sku");
     if (!sku) return NextResponse.json({ error: "sku required" }, { status: 400 });
@@ -258,6 +289,110 @@ export async function POST(req: Request) {
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ supplier: data });
+  }
+
+  // ===== 创建报价 =====
+  if (body.action === "create-quotation") {
+    const required = ["inquiry_id", "supplier_id", "unit_price"];
+    for (const f of required) {
+      if (!body[f]) {
+        return NextResponse.json({ error: `${f} is required` }, { status: 400 });
+      }
+    }
+
+    const { data, error } = await supabase
+      .from("quotations")
+      .insert({
+        inquiry_id: body.inquiry_id,
+        supplier_id: body.supplier_id,
+        unit_price: body.unit_price,
+        moq: body.moq || null,
+        lead_time_days: body.lead_time_days || null,
+        shipping_terms: body.shipping_terms || null,
+        notes: body.notes || null,
+        status: "sent",
+      })
+      .select()
+      .single();
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    // 更新询盘状态为 contacted
+    await supabase.from("inquiries").update({ status: "contacted" }).eq("id", body.inquiry_id);
+
+    return NextResponse.json({ quotation: data });
+  }
+
+  // ===== 接受报价 → 生成订单 =====
+  if (body.action === "accept-quotation") {
+    if (!body.quotation_id) {
+      return NextResponse.json({ error: "quotation_id is required" }, { status: 400 });
+    }
+
+    const { data: quotation, error: qErr } = await supabase
+      .from("quotations")
+      .select("*, inquiries!inner (product_id, buyer_name, buyer_email)")
+      .eq("id", body.quotation_id)
+      .single();
+
+    if (qErr || !quotation) {
+      return NextResponse.json({ error: "Quotation not found" }, { status: 404 });
+    }
+
+    const quantity = body.quantity || quotation.moq || 1;
+    const totalAmount = Number(quotation.unit_price) * Number(quantity);
+
+    const { data: order, error: oErr } = await supabase
+      .from("orders")
+      .insert({
+        quotation_id: body.quotation_id,
+        quantity,
+        total_amount: totalAmount,
+        status: "confirmed",
+      })
+      .select()
+      .single();
+
+    if (oErr) {
+      return NextResponse.json({ error: oErr.message }, { status: 500 });
+    }
+
+    await supabase.from("quotations").update({ status: "accepted" }).eq("id", body.quotation_id);
+    await supabase.from("inquiries").update({ status: "quoted" }).eq("id", quotation.inquiry_id);
+
+    return NextResponse.json({ order });
+  }
+
+  // ===== 更新订单状态 + 物流追踪 =====
+  if (body.action === "update-order-status") {
+    const validStatuses = [
+      "confirmed", "sampling", "production", "qc_passed",
+      "shipped", "delivered", "cancelled",
+    ];
+    if (!body.id || !body.status) {
+      return NextResponse.json({ error: "id and status are required" }, { status: 400 });
+    }
+    if (!validStatuses.includes(body.status as string)) {
+      return NextResponse.json({
+        error: `Invalid status. Valid: ${validStatuses.join(", ")}`,
+      }, { status: 400 });
+    }
+
+    const updateData: Record<string, unknown> = { status: body.status };
+    if (body.shipping_tracking) updateData.shipping_tracking = body.shipping_tracking;
+    if (body.production_progress) updateData.production_progress = body.production_progress;
+
+    const { data, error } = await supabase
+      .from("orders")
+      .update(updateData)
+      .eq("id", body.id)
+      .select()
+      .single();
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ order: data });
   }
 
   // ===== Delete Supplier =====
