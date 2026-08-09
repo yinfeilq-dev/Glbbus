@@ -60,6 +60,65 @@ export default async function HomePage({ params }: Props) {
           </div>
         </section>
 
+        {/* CDU 液冷集成服务专区 */}
+        <section className="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 py-20">
+          <div className="mx-auto max-w-7xl px-4">
+            <div className="mb-10 text-center">
+              <span className="inline-block rounded-full bg-amber-400 px-4 py-1 text-xs font-bold tracking-wide text-slate-900">
+                ⭐ {t(dict, "home.cdu.badge")}
+              </span>
+              <h2 className="mt-4 text-2xl font-bold text-white sm:text-3xl">
+                {t(dict, "home.cdu.title")}
+              </h2>
+              <p className="mx-auto mt-3 max-w-3xl text-sm leading-relaxed text-slate-300">
+                {t(dict, "home.cdu.subtitle")}
+              </p>
+            </div>
+
+            <div className="grid items-center gap-8 lg:grid-cols-2">
+              {/* 流程图 */}
+              <div className="overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/products/cdu-flow.png"
+                  alt="Liquid cooling manifold integration workflow"
+                  className="w-full"
+                  loading="lazy"
+                />
+              </div>
+
+              {/* 卖点列表 + CTA */}
+              <div>
+                <ul className="space-y-3">
+                  {((dict as Record<string, Record<string, Record<string, string[]>>>).home.cdu.points as string[]).map((point, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200"
+                    >
+                      <span className="mt-0.5 text-emerald-400">✔</span>
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-8 flex flex-wrap items-center gap-4">
+                  <Link
+                    href={localizedPath(l, "/products/KD-CDU-INTEGRATION")}
+                    className="rounded-lg bg-amber-400 px-6 py-3 text-sm font-semibold text-slate-900 hover:bg-amber-300 transition"
+                  >
+                    {t(dict, "home.cdu.cta")} →
+                  </Link>
+                  <Link
+                    href={localizedPath(l, "/products")}
+                    className="text-sm font-medium text-blue-300 hover:text-blue-200"
+                  >
+                    {t(dict, "home.cdu.cta_sub")} →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* 平台定位 */}
         <section className="mx-auto max-w-7xl px-4 py-16">
           <div className="mx-auto max-w-3xl text-center">

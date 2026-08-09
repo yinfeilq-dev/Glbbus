@@ -33,7 +33,21 @@
     "hero_subtitle": "Conéctese con fabricantes verificados para sus necesidades B2B. Emparejamiento con IA, cotizaciones en tiempo real, soporte integral.",
     "categories_title": "Categorías de Productos",
     "featured_title": "Productos Destacados",
-    "no_featured": "Los productos destacados aparecerán una vez agregados."
+    "no_featured": "Los productos destacados aparecerán una vez agregados.",
+    "cdu": {
+      "badge": "SERVICIO INSIGNIA",
+      "title": "Integración de Manifolds de Refrigeración Líquida — Del Plano a Piezas Sin Soldadura Probadas",
+      "subtitle": "Un solo socio para todo el circuito de fluidos: prototipo 3D en 48 horas, conformado de manifold sin soldadura, puertos mecanizados, limpieza y pruebas de presión. Para CDU y nivel rack en centros de datos de IA.",
+      "points": [
+        "Prototipo 3D en 48 horas",
+        "Manifold de una pieza sin soldadura (riesgo cero de fugas)",
+        "Puertos mecanizados — compresión / NPT / BSPT",
+        "Limpieza y pruebas hidráulicas y neumáticas incluidas",
+        "Prototipo → piloto → producción en masa"
+      ],
+      "cta": "Ver el Servicio",
+      "cta_sub": "Servicios de Refrigeración Líquida"
+    }
   },
   "about": {
     "page_title": "Acerca de GlbBus",

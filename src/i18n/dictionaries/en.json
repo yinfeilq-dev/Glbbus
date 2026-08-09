@@ -29,7 +29,21 @@
   "home": {
     "hero_title": "Industrial Services, Globally Connected",
     "hero_subtitle": "GlbBus connects you to verified industrial manufacturers and provides high-quality cross-border network acceleration through the Shanghai Internet Exchange (SHIXP).",
-    "categories_title": "Services"
+    "categories_title": "Services",
+    "cdu": {
+      "badge": "FLAGSHIP SERVICE",
+      "title": "Liquid Cooling Manifold Integration — From Drawing to Tested Weld-Free Parts",
+      "subtitle": "One partner for the entire fluid path: 48-hour 3D-printed prototype, no-weld seamless manifold forming, machined branch ports, cleaning & pressure testing. Built for AI data center CDU and rack-level cooling.",
+      "points": [
+        "48-hour 3D-printed prototype",
+        "No-weld one-piece manifold (zero leak risk)",
+        "Machined branch ports — compression / NPT / BSPT ready",
+        "Cleaning, hydro & pneumatic testing included",
+        "Prototype → pilot → mass production"
+      ],
+      "cta": "View the Service",
+      "cta_sub": "Liquid Cooling Services"
+    }
   },
   "about": {
     "mission_title": "Our Mission",
