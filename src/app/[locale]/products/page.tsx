@@ -97,6 +97,7 @@ export default async function ProductsPage({ params }: Props) {
 
   // 分类分组：category -> 组 key 映射
   const CATEGORY_TO_GROUP: Record<string, string> = {
+    "Liquid Cooling Service": "liquid-cooling-services",
     "Metal 3D Printer": "metal-3d-printers",
     "Stainless Steel Pipe": "stainless-steel-pipes",
     "Stainless Steel Tube": "stainless-steel-pipes",
@@ -105,7 +106,7 @@ export default async function ProductsPage({ params }: Props) {
   };
 
   // 组顺序（保证展示顺序稳定）
-  const GROUP_ORDER = ["metal-3d-printers", "stainless-steel-pipes", "pipe-fittings"];
+  const GROUP_ORDER = ["liquid-cooling-services", "metal-3d-printers", "stainless-steel-pipes", "pipe-fittings"];
 
   // 按组归类产品
   const grouped: Record<string, ProductWithSupplier[]> = {};

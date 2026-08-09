@@ -87,7 +87,8 @@
     "category_groups": {
       "metal-3d-printers": "Metal 3D Printers",
       "stainless-steel-pipes": "Stainless Steel Pipes & Tubes",
-      "pipe-fittings": "Stainless Steel Fittings"
+      "pipe-fittings": "Stainless Steel Fittings",
+      "liquid-cooling-services": "Liquid Cooling Services"
     },
     "items": "items"
   },

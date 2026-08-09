@@ -97,7 +97,8 @@
     "category_groups": {
       "metal-3d-printers": "Металлические 3D-принтеры",
       "stainless-steel-pipes": "Трубы из нержавеющей стали",
-      "pipe-fittings": "Фитинги из нержавеющей стали"
+      "pipe-fittings": "Фитинги из нержавеющей стали",
+      "liquid-cooling-services": "Услуги жидкостного охлаждения"
     },
     "items": "шт."
   },

@@ -97,7 +97,8 @@
     "category_groups": {
       "metal-3d-printers": "Impresoras 3D de Metal",
       "stainless-steel-pipes": "Tubos de Acero Inoxidable",
-      "pipe-fittings": "Accesorios de Acero Inoxidable"
+      "pipe-fittings": "Accesorios de Acero Inoxidable",
+      "liquid-cooling-services": "Servicios de Refrigeración Líquida"
     },
     "items": "artículos"
   },

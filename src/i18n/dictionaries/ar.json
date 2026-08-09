@@ -97,7 +97,8 @@
     "category_groups": {
       "metal-3d-printers": "طابعات المعادن ثلاثية الأبعاد",
       "stainless-steel-pipes": "أنابيب الفولاذ المقاوم للصدأ",
-      "pipe-fittings": "وصلات الفولاذ المقاوم للصدأ"
+      "pipe-fittings": "وصلات الفولاذ المقاوم للصدأ",
+      "liquid-cooling-services": "خدمات التبريد السائل"
     },
     "items": "منتجات"
   },
