@@ -23,6 +23,7 @@
   "navigation": {
     "products": "Productos",
     "suppliers": "Proveedores",
+    "solutions": "Soluciones",
     "acceleration": "Aceleración",
     "about": "Acerca de",
     "contact": "Contacto",
@@ -88,6 +89,122 @@
   "meta": {
     "home_description": "GlbBus es una plataforma B2B impulsada por IA que conecta compradores globales con fabricantes industriales verificados de China, Rusia y mercados emergentes.",
     "home_keywords": "B2B, abastecimiento industrial, fabricación, proveedores de China, IA, compras transfronterizas, productos industriales"
+  },
+  "solutions": {
+    "page_title": "Centro de Soluciones",
+    "breadcrumb": "Centro de Soluciones",
+    "hero_title": "Soluciones de Software e Integración",
+    "hero_subtitle": "Desde software de abastecimiento con IA hasta integración industrial llave en mano — un solo socio para todo su flujo digital y de fabricación.",
+    "software_section": "Soluciones de Software",
+    "software_title": "Soluciones de Software",
+    "software_desc": "Herramientas en la nube que impulsan su abastecimiento industrial global, operaciones y compromiso con clientes.",
+    "software": [
+      {
+        "title": "Abastecimiento y Emparejamiento con IA",
+        "desc": "Nuestro motor de IA empareja sus requisitos con fabricantes verificados y selecciona los mejores proveedores en minutos.",
+        "features": [
+          "Análisis de requisitos y emparejamiento",
+          "Puntuación multicriterio (precio, plazo, calidad)",
+          "Comparación de cotizaciones en un panel"
+        ]
+      },
+      {
+        "title": "Plataforma de Comercio Multilingüe",
+        "desc": "Lance y gestione su tienda industrial en 5+ idiomas con contenido localizado, SEO y pagos.",
+        "features": [
+          "Tiendas en EN/ZH/RU/ES/AR",
+          "SEO y contenido localizados",
+          "Precios y pagos multimoneda"
+        ]
+      },
+      {
+        "title": "Automatización de Consultas y CRM",
+        "desc": "Capture, dirija y responda a solicitudes de cotización automáticamente — nunca pierda un cliente potencial.",
+        "features": [
+          "Captura y enrutamiento automático",
+          "Chatbot de IA 24/7 para respuestas instantáneas",
+          "CRM con recordatorios de seguimiento"
+        ]
+      },
+      {
+        "title": "Contenido y Listados con IA",
+        "desc": "Genere descripciones de productos, especificaciones y textos de marketing en varios idiomas con IA.",
+        "features": [
+          "Descripciones en 5 idiomas",
+          "Textos optimizados para SEO",
+          "Listado masivo y traducción"
+        ]
+      },
+      {
+        "title": "Visibilidad de la Cadena de Suministro",
+        "desc": "Siga pedidos, progreso de producción y logística de fábrica a puerto en tiempo real.",
+        "features": [
+          "Seguimiento de pedidos y producción",
+          "Monitoreo de hitos logísticos",
+          "Alertas de excepciones e informes"
+        ]
+      }
+    ],
+    "integration_section": "Soluciones de Integración",
+    "integration_title": "Soluciones de Integración",
+    "integration_desc": "Soluciones llave en mano de hardware e ingeniería entregadas por nuestros socios fabricantes verificados.",
+    "integration": [
+      {
+        "title": "Integración de Refrigeración Líquida",
+        "desc": "Integración integral de manifolds de refrigeración líquida para centros de datos de IA — del plano a piezas probadas sin soldadura.",
+        "features": [
+          "Prototipo 3D en 48 horas",
+          "Manifold de una pieza sin soldadura (riesgo cero)",
+          "Pruebas de limpieza, hidráulicas y neumáticas"
+        ],
+        "cta": "Ver Servicio",
+        "href": "/products/KD-CDU-INTEGRATION"
+      },
+      {
+        "title": "Aceleración de Red Transfronteriza",
+        "desc": "Conectividad estable y de baja latencia a través de SHIXP — interconexión directa para e-commerce, SaaS y equipos multinacionales.",
+        "features": [
+          "Ancho de banda flexible 10M~100G",
+          "Latencia punto a punto <1.15ms",
+          "Infraestructura nacional SHIXP"
+        ],
+        "cta": "Ver Servicio",
+        "href": "/acceleration"
+      },
+      {
+        "title": "Impresión 3D de Metal",
+        "desc": "Impresoras SLM de metal de precisión y piezas para prototipado rápido y producción de pequeños lotes.",
+        "features": [
+          "Espesor de capa ajustable 5-30μm",
+          "Titanio, aluminio y acero inoxidable",
+          "Prototipo → piloto → producción masiva"
+        ],
+        "cta": "Ver Productos",
+        "href": "/products"
+      },
+      {
+        "title": "Tubos y Accesorios de Acero Inoxidable",
+        "desc": "Tubos, tuberías y accesorios sin costura de acero inoxidable para aplicaciones de fluidos, industriales y alta presión.",
+        "features": [
+          "OD 1-630mm, pared 0.1-60mm",
+          "Normas GB / ASTM / EN",
+          "Largos personalizados y corte de precisión"
+        ],
+        "cta": "Ver Productos",
+        "href": "/products"
+      }
+    ],
+    "process_section": "Cómo Funciona",
+    "process_title": "De la Consulta a la Entrega",
+    "process_steps": [
+      "Envíe sus requisitos",
+      "La IA empareja los mejores proveedores",
+      "Reciba cotizaciones y muestras",
+      "Producción y control de calidad",
+      "Logística y soporte postventa"
+    ],
+    "cta_title": "¿Busca una Solución Personalizada?",
+    "cta_desc": "Cuéntenos sobre su proyecto — nuestros ingenieros y la IA diseñarán la solución adecuada en 24 horas."
   },
   "products": {
     "page_title": "Centro de Productos",

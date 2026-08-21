@@ -23,6 +23,7 @@
   "navigation": {
     "home": "Home",
     "products": "Products",
+    "solutions": "Solutions",
     "acceleration": "Acceleration",
     "contact": "Contact"
   },
@@ -78,6 +79,122 @@
   "meta": {
     "home_description": "GlbBus — Global industrial services and cross-border network acceleration through SHIXP.",
     "home_keywords": "B2B, industrial sourcing, network acceleration, cross-border, SHIXP"
+  },
+  "solutions": {
+    "page_title": "Solutions Center",
+    "breadcrumb": "Solutions Center",
+    "hero_title": "Software & Integration Solutions",
+    "hero_subtitle": "From AI-powered sourcing software to turnkey industrial integration — one partner for your entire digital and manufacturing workflow.",
+    "software_section": "Software Solutions",
+    "software_title": "Software Solutions",
+    "software_desc": "Cloud-based tools that power your global industrial sourcing, operations and customer engagement.",
+    "software": [
+      {
+        "title": "AI Sourcing & Matching",
+        "desc": "Our AI engine matches your requirements with verified manufacturers, shortlisting the best-fit suppliers in minutes.",
+        "features": [
+          "Requirement parsing & supplier matching",
+          "Multi-criteria scoring (price, lead time, quality)",
+          "Quotation comparison in one dashboard"
+        ]
+      },
+      {
+        "title": "Multi-Language E-Commerce Platform",
+        "desc": "Launch and manage your industrial storefront in 5+ languages with localized content, SEO and payments.",
+        "features": [
+          "EN / ZH / RU / ES / AR storefronts",
+          "Localized SEO & content",
+          "Multi-currency pricing & checkout"
+        ]
+      },
+      {
+        "title": "Inquiry & CRM Automation",
+        "desc": "Capture, route and respond to RFQs automatically — never miss a lead, even outside business hours.",
+        "features": [
+          "Automated inquiry capture & routing",
+          "24/7 AI chatbot for instant replies",
+          "CRM pipeline with follow-up reminders"
+        ]
+      },
+      {
+        "title": "AI Content & Product Listing",
+        "desc": "Generate product descriptions, specifications and marketing copy in multiple languages with AI.",
+        "features": [
+          "5-language product descriptions",
+          "SEO-optimized marketing copy",
+          "Bulk listing & translation"
+        ]
+      },
+      {
+        "title": "Supply Chain Visibility",
+        "desc": "Track orders, production progress and logistics from factory to port in real time.",
+        "features": [
+          "Order & production tracking",
+          "Logistics milestone monitoring",
+          "Exception alerts & reports"
+        ]
+      }
+    ],
+    "integration_section": "Integration Solutions",
+    "integration_title": "Integration Solutions",
+    "integration_desc": "Turnkey hardware & engineering solutions delivered by our verified manufacturing partners.",
+    "integration": [
+      {
+        "title": "Liquid Cooling Integration",
+        "desc": "End-to-end liquid cooling manifold integration for AI data centers — from drawing to tested, weld-free parts.",
+        "features": [
+          "48-hour 3D-printed prototype",
+          "No-weld one-piece manifold (zero leak risk)",
+          "Cleaning, hydro & pneumatic testing included"
+        ],
+        "cta": "View Service",
+        "href": "/products/KD-CDU-INTEGRATION"
+      },
+      {
+        "title": "Cross-Border Network Acceleration",
+        "desc": "Stable, low-latency connectivity through SHIXP — direct peering for e-commerce, SaaS and multinational teams.",
+        "features": [
+          "10M~100G flexible bandwidth",
+          "<1.15ms point-to-point latency",
+          "SHIXP national-grade infrastructure"
+        ],
+        "cta": "View Service",
+        "href": "/acceleration"
+      },
+      {
+        "title": "Metal 3D Printing",
+        "desc": "Precision SLM metal 3D printers and parts for rapid prototyping and small-batch production.",
+        "features": [
+          "5-30μm adjustable layer thickness",
+          "Titanium, aluminum & stainless alloys",
+          "Prototype → pilot → mass production"
+        ],
+        "cta": "View Products",
+        "href": "/products"
+      },
+      {
+        "title": "Stainless Steel Pipes & Fittings",
+        "desc": "Seamless stainless steel pipes, tubes and fittings for fluid, industrial and high-pressure applications.",
+        "features": [
+          "OD 1-630mm, wall 0.1-60mm",
+          "GB / ASTM / EN standards",
+          "Custom lengths & precision cutting"
+        ],
+        "cta": "View Products",
+        "href": "/products"
+      }
+    ],
+    "process_section": "How It Works",
+    "process_title": "From Inquiry to Delivery",
+    "process_steps": [
+      "Submit your requirements",
+      "AI matches the best suppliers",
+      "Receive quotes & samples",
+      "Production & quality control",
+      "Logistics & after-sales support"
+    ],
+    "cta_title": "Looking for a Custom Solution?",
+    "cta_desc": "Tell us about your project — our engineers and AI will design the right solution within 24 hours."
   },
   "products": {
     "page_title": "Product Center",

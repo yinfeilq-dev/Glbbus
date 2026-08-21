@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 // 公开静态路由（不含 locale 前缀）
-const STATIC_ROUTES = ["", "products", "suppliers", "acceleration", "about", "contact"];
+const STATIC_ROUTES = ["", "products", "solutions", "suppliers", "acceleration", "about", "contact"];
 
 function xmlUrl(loc: string, priority = "0.8", changefreq = "weekly") {
   return `  <url>
