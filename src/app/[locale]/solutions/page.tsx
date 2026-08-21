@@ -20,6 +20,7 @@ type SolutionItem = {
   features: string[];
   cta?: string;
   href?: string;
+  tag?: string;
 };
 
 /* 软件方案图标与配色（静态类名，避免 Tailwind JIT 无法识别动态类） */
@@ -29,6 +30,16 @@ const SOFTWARE_META = [
   { icon: "📬", chip: "bg-emerald-50 text-emerald-600 ring-emerald-200/60" },
   { icon: "🤖", chip: "bg-amber-50 text-amber-600 ring-amber-200/60" },
   { icon: "📦", chip: "bg-cyan-50 text-cyan-600 ring-cyan-200/60" },
+];
+
+/* 企业数字化方案图标与配色 */
+const ENTERPRISE_META = [
+  { icon: "🗄️", chip: "bg-slate-50 text-slate-600 ring-slate-200/60" },
+  { icon: "👁️", chip: "bg-cyan-50 text-cyan-600 ring-cyan-200/60" },
+  { icon: "🔀", chip: "bg-orange-50 text-orange-600 ring-orange-200/60" },
+  { icon: "🏭", chip: "bg-blue-50 text-blue-600 ring-blue-200/60" },
+  { icon: "🧩", chip: "bg-violet-50 text-violet-600 ring-violet-200/60" },
+  { icon: "🛡️", chip: "bg-emerald-50 text-emerald-600 ring-emerald-200/60" },
 ];
 
 /* 集成方案图标与配色 */
@@ -50,6 +61,7 @@ export default async function SolutionsPage({ params }: Props) {
   const s = (key: string): string => (sol[key] as string) ?? "";
 
   const software = (sol.software as SolutionItem[]) ?? [];
+  const enterprise = (sol.software_enterprise as SolutionItem[]) ?? [];
   const integration = (sol.integration as SolutionItem[]) ?? [];
   const processSteps = (sol.process_steps as string[]) ?? [];
 
@@ -92,7 +104,14 @@ export default async function SolutionsPage({ params }: Props) {
               {s("software_desc")}
             </p>
 
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {/* 子分组一：跨境电商解决方案 */}
+            <div className="mb-3 flex items-center gap-3">
+              <div className="h-0.5 w-6 rounded-full bg-teal-400" />
+              <h3 className="text-sm font-bold uppercase tracking-widest text-teal-600">
+                {s("software_group_ec")}
+              </h3>
+            </div>
+            <div className="mb-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {software.map((item, i) => {
                 const meta = SOFTWARE_META[i % SOFTWARE_META.length];
                 return (
@@ -109,6 +128,46 @@ export default async function SolutionsPage({ params }: Props) {
                       {item.features.map((f, j) => (
                         <li key={j} className="flex items-start gap-2 text-xs text-slate-600">
                           <span className="mt-0.5 text-emerald-500">✔</span>
+                          <span>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* 子分组二：企业数字化解决方案 */}
+            <div className="mb-3 flex items-center gap-3">
+              <div className="h-0.5 w-6 rounded-full bg-cyan-400" />
+              <h3 className="text-sm font-bold uppercase tracking-widest text-cyan-600">
+                {s("software_group_ent")}
+              </h3>
+            </div>
+            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {enterprise.map((item, i) => {
+                const meta = ENTERPRISE_META[i % ENTERPRISE_META.length];
+                return (
+                  <div
+                    key={i}
+                    className="group flex flex-col rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-md"
+                  >
+                    <div className="mb-4 flex items-center justify-between">
+                      <div className={`flex h-12 w-12 items-center justify-center rounded-lg text-xl ring-1 ${meta.chip}`}>
+                        {meta.icon}
+                      </div>
+                      {item.tag && (
+                        <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold text-slate-500">
+                          {item.tag}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="mb-2 text-base font-bold text-slate-900">{item.title}</h3>
+                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500">{item.desc}</p>
+                    <ul className="space-y-1.5 border-t border-slate-100 pt-3">
+                      {item.features.map((f, j) => (
+                        <li key={j} className="flex items-start gap-2 text-xs text-slate-600">
+                          <span className="mt-0.5 text-cyan-500">✦</span>
                           <span>{f}</span>
                         </li>
                       ))}

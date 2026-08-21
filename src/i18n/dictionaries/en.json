@@ -194,7 +194,77 @@
       "Logistics & after-sales support"
     ],
     "cta_title": "Looking for a Custom Solution?",
-    "cta_desc": "Tell us about your project — our engineers and AI will design the right solution within 24 hours."
+    "cta_desc": "Tell us about your project — our engineers and AI will design the right solution within 24 hours.",
+    "software_group_ec": "Cross-Border E-Commerce Solutions",
+    "software_group_ent": "Enterprise Digitalization Solutions",
+    "software_enterprise": [
+      {
+        "title": "Data Foundation Platform",
+        "desc": "Lightweight enterprise data integration & governance — connect, store, validate and publish your data as APIs in days, not months.",
+        "tag": "Data Platform",
+        "features": [
+          "Multi-source ingestion (JDBC / API / File / Kafka)",
+          "Lakehouse layering ODS → DWD → DWS",
+          "Quality scoring, metadata & lineage",
+          "One-click RESTful API publishing"
+        ]
+      },
+      {
+        "title": "AI Assembly Assistant",
+        "desc": "AI vision + digitized SOP system that prevents assembly errors in real time and archives full multimedia traceability.",
+        "tag": "AI Vision",
+        "features": [
+          "Real-time error detection (missing/wrong/reversed parts)",
+          "SOP quantitative scoring & step gating",
+          "Automatic photo/video records & archiving",
+          "Full per-unit traceability & export"
+        ]
+      },
+      {
+        "title": "Protocol Exchange Platform",
+        "desc": "Configurable protocol conversion & data exchange gateway that connects TCP, HTTP and MQ systems without code.",
+        "tag": "Integration",
+        "features": [
+          "Multi-protocol access (TCP / HTTP / MQ)",
+          "Config-driven parsing, mapping & routing",
+          "Hot-reload rules with zero downtime",
+          "Full-link tracing & monitoring"
+        ]
+      },
+      {
+        "title": "MES Manufacturing Execution",
+        "desc": "ISA-95 based manufacturing execution system for transparent, traceable and efficient shop-floor operations.",
+        "tag": "MES",
+        "features": [
+          "Production planning & scheduling",
+          "Quality control (IQC→OQC) & SPC",
+          "Equipment management & OEE",
+          "Material traceability & paperless SOP"
+        ]
+      },
+      {
+        "title": "Modular ERP System",
+        "desc": "Modular monolith ERP with CRM, procurement, warehouse and production modules — deploy what you need, scale later.",
+        "tag": "ERP",
+        "features": [
+          "CRM with full customer lifecycle",
+          "Procurement & warehouse management",
+          "Production & project management",
+          "Workflow engine & notifications"
+        ]
+      },
+      {
+        "title": "Smart Factory Platform",
+        "desc": "Integrated digital plant management for chemical & pharmaceutical industries — safety, operations and maintenance in one platform.",
+        "tag": "Smart Factory",
+        "features": [
+          "Regulatory-compliant safety management",
+          "Production, energy & patrol operations",
+          "Equipment & maintenance management",
+          "AI video monitoring & command dashboard"
+        ]
+      }
+    ]
   },
   "products": {
     "page_title": "Product Center",

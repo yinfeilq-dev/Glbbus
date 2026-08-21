@@ -204,7 +204,77 @@
       "Logística y soporte postventa"
     ],
     "cta_title": "¿Busca una Solución Personalizada?",
-    "cta_desc": "Cuéntenos sobre su proyecto — nuestros ingenieros y la IA diseñarán la solución adecuada en 24 horas."
+    "cta_desc": "Cuéntenos sobre su proyecto — nuestros ingenieros y la IA diseñarán la solución adecuada en 24 horas.",
+    "software_group_ec": "Soluciones de Comercio Transfronterizo",
+    "software_group_ent": "Soluciones de Digitalización Empresarial",
+    "software_enterprise": [
+      {
+        "title": "Plataforma de Fundación de Datos",
+        "desc": "Plataforma ligera de integración y gobernanza de datos empresariales — conecte, almacene, valide y publique sus datos como APIs en días, no meses.",
+        "tag": "Plataforma de Datos",
+        "features": [
+          "Ingesta multi-fuente (JDBC / API / Archivo / Kafka)",
+          "Capas de lakehouse ODS → DWD → DWS",
+          "Puntuación de calidad, metadatos y linaje",
+          "Publicación de API RESTful con un clic"
+        ]
+      },
+      {
+        "title": "Asistente de Ensamblaje con IA",
+        "desc": "Sistema de visión IA + SOP digitalizado que previene errores de ensamblaje en tiempo real y archiva trazabilidad multimedia completa.",
+        "tag": "Visión IA",
+        "features": [
+          "Detección de errores en tiempo real (piezas faltantes/incorrectas/invertidas)",
+          "Puntuación cuantitativa de SOP y control de pasos",
+          "Registro y archivado automático de fotos/videos",
+          "Trazabilidad completa por unidad y exportación"
+        ]
+      },
+      {
+        "title": "Plataforma de Intercambio de Protocolos",
+        "desc": "Puerta de enlace configurable de conversión de protocolos e intercambio de datos que conecta sistemas TCP, HTTP y MQ sin código.",
+        "tag": "Integración",
+        "features": [
+          "Acceso multi-protocolo (TCP / HTTP / MQ)",
+          "Análisis, mapeo y enrutamiento impulsados por configuración",
+          "Reglas de recarga en caliente sin tiempo de inactividad",
+          "Trazabilidad y monitoreo de enlace completo"
+        ]
+      },
+      {
+        "title": "MES — Ejecución de Manufactura",
+        "desc": "Sistema de ejecución de manufactura basado en ISA-95 para operaciones de planta transparentes, trazables y eficientes.",
+        "tag": "MES",
+        "features": [
+          "Planificación y programación de producción",
+          "Control de calidad (IQC→OQC) y SPC",
+          "Gestión de equipos y OEE",
+          "Trazabilidad de materiales y SOP sin papel"
+        ]
+      },
+      {
+        "title": "Sistema ERP Modular",
+        "desc": "ERP monolítico modular con módulos de CRM, compras, almacén y producción — implemente lo que necesita, escale después.",
+        "tag": "ERP",
+        "features": [
+          "CRM con ciclo de vida completo del cliente",
+          "Gestión de compras y almacén",
+          "Gestión de producción y proyectos",
+          "Motor de flujo de trabajo y notificaciones"
+        ]
+      },
+      {
+        "title": "Plataforma de Fábrica Inteligente",
+        "desc": "Gestión digital integrada de planta para industrias química y farmacéutica — seguridad, operaciones y mantenimiento en una plataforma.",
+        "tag": "Fábrica Inteligente",
+        "features": [
+          "Gestión de seguridad conforme a normativa",
+          "Operaciones de producción, energía y patrullaje",
+          "Gestión de equipos y mantenimiento",
+          "Monitoreo por video IA y panel de mando"
+        ]
+      }
+    ]
   },
   "products": {
     "page_title": "Centro de Productos",
